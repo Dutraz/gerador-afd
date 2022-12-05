@@ -1,4 +1,4 @@
-from linguagem.gramatica import Gramatica
+from linguagem.gramatica.gramatica import Gramatica
 
 
 class Linguagem:

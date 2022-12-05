@@ -1,8 +1,8 @@
 import re
 
-from linguagem.simbolo import SimboloNaoTerminal
+from linguagem.gramatica.simbolo import SimboloNaoTerminal
 from linguagem.linguagem import Linguagem
-from linguagem.gramatica import Gramatica
+from linguagem.gramatica.gramatica import Gramatica
 
 
 def lerEntrada(path: str):
@@ -13,7 +13,7 @@ def lerEntrada(path: str):
         with open(path, encoding='utf-8') as arquivo:
 
             # Flag indicando se esta no meio da leitura de uma gramática
-            gramatica = Gramatica([])
+            gramatica = Gramatica()
             modo_gramatica = False
 
             for linha in arquivo:
@@ -23,12 +23,17 @@ def lerEntrada(path: str):
 
                 # Identifica qual o tipo de leitura (sentença/gramatica/linha em branco)
                 if ('::=' in linha):
-                    gramatica.addSimbolo(
-                        SimboloNaoTerminal().porGramatica(linha)
-                    )
+                    if (modo_gramatica == False):
+                        gramatica = Gramatica()
+
                     modo_gramatica = True
+                    gramatica.addSimbolo(
+                        SimboloNaoTerminal(linha)
+                    )
+
                 elif (linha != ''):
-                    gramatica = gramatica.porSentenca(linha)
+                    gramatica = Gramatica(linha)
+
                 else:
                     modo_gramatica = False
 
@@ -38,7 +43,7 @@ def lerEntrada(path: str):
                     gramatica = Gramatica([])
 
             # Caso chegue no final do arquivo com uma gramática em aberto
-            if (modo_gramatica == True and gramatica.getSimbolos() != []):
+            if (modo_gramatica == True):
                 linguagem.addGramatica(gramatica)
 
     except Exception as e:

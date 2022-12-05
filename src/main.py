@@ -1,5 +1,5 @@
-from linguagem.simbolo import Simbolo
-from linguagem.regra import Regra
+from linguagem.gramatica.simbolo import Simbolo
+from linguagem.gramatica.regra import Regra
 from linguagem.gramatica import Gramatica
 
 
