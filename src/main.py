@@ -1,6 +1,6 @@
-from gramatica.simbolo import Simbolo
-from gramatica.regra import Regra
-from gramatica.gramatica import Gramatica
+from linguagem.simbolo import Simbolo
+from linguagem.regra import Regra
+from linguagem.gramatica import Gramatica
 
 
 def main():
