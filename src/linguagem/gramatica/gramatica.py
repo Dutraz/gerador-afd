@@ -9,8 +9,6 @@ class Gramatica:
             self.simbolos = list(argumento)
         elif (argumento is list[SimboloNaoTerminal]):
             self.simbolos = argumento
-        elif (isinstance(argumento, str)):
-            self.simbolos = self.__decodificarSentenca(argumento)
         elif (argumento == []):
             self.simbolos = []
 
@@ -24,28 +22,8 @@ class Gramatica:
     def getSimbolos(self):
         return self.simbolos
 
-    # Decodifica a string da gramática e retorna elementos
-    def __decodificarSentenca(self, sentenca: str):
-
-        # Gera símbolos não terminais em ordem alfabética
-        naoTerminal = (
-            SimboloNaoTerminal(chr(i)) for i in range(ord('A'), ord('Z'))
-        )
-
-        # Armazena os símbolos de controle
-        atual = SimboloNaoTerminal('S', True)
-        proximo = None
-        simbolos = []
-
-        # Gera uma nova gramática para cada símbolo da sentença
-        for simbolo in sentenca:
-            proximo = next(naoTerminal)
-            atual.producao.addRegra(Regra([SimboloTerminal(simbolo), proximo]))
-            simbolos.append(atual)
-            atual = proximo
-
-        # Insere a produção final na gramática (contendo apenas epsilon)
-        atual.producao.addRegra(Regra([Epsilon()]))
-        simbolos.append(atual)
-
+    def getSimbolosNaoTerminais(self):
+        simbolos = set()
+        for simbolo in self.simbolos:
+            simbolos.update(simbolo.getProducao().getSimbolosNaoTerminais())
         return simbolos

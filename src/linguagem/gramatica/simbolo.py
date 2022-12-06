@@ -1,4 +1,3 @@
-import re
 from linguagem.gramatica.producao import Producao
 
 
@@ -19,11 +18,14 @@ class SimboloTerminal(Simbolo):
     def __init__(self, caracter: str):
         super().__init__(caracter)
 
+    def __str__(self):
+        return self.caracter
+
     def __hash__(self):
         return hash(self.caracter)
 
 
-class Epsilon(SimboloTerminal):
+class Epsilon(Simbolo):
 
     def __init__(self):
         super().__init__('ε')
@@ -32,14 +34,9 @@ class Epsilon(SimboloTerminal):
 class SimboloNaoTerminal(Simbolo):
 
     def __init__(self, texto: str, inicial: bool = False):
-
-        # Verifica se é uma gramática ou caracter
-        if ('::=' in texto):
-            [self.caracter, self.producao, self.inicial] = self.__decodificarGramatica(texto)
-        else:
-            super().__init__(texto)
-            self.producao = Producao()
-            self.inicial = inicial
+        super().__init__(texto)
+        self.producao = Producao()
+        self.inicial = inicial
 
     def __str__(self):
         return f'<{self.caracter}>'
@@ -64,13 +61,3 @@ class SimboloNaoTerminal(Simbolo):
 
     def isInicial(self):
         return self.inicial
-
-    # Decodifica a string da gramática e retorna elementos
-    def __decodificarGramatica(self, gramatica: str):
-
-        [simbolo, regras] = gramatica.split('::=')
-
-        simbolo = re.search('<(.*?)>', simbolo).group(1)
-        producao = Producao(regras)
-
-        return [simbolo, producao, simbolo == 'S']

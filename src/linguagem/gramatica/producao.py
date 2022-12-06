@@ -8,8 +8,6 @@ class Producao:
             self.regras = list(argumento)
         elif (argumento is list[Regra]):
             self.regras = argumento
-        elif (isinstance(argumento, str)):
-            self.regras = self.__decodificarGramatica(argumento)
         elif (argumento == []):
             self.regras = []
 
@@ -28,7 +26,3 @@ class Producao:
         for regra in self.regras:
             simbolos.update(regra.getSimbolosNaoTerminais())
         return simbolos
-
-    # Decodifica a string da gramática e retorna elementos
-    def __decodificarGramatica(self, gramatica: str):
-        return [Regra(regra) for regra in gramatica.split('|')]

@@ -1,7 +1,9 @@
 import re
 
-from linguagem.gramatica.simbolo import SimboloNaoTerminal
+from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
 from linguagem.gramatica.gramatica import Gramatica
+from linguagem.gramatica.regra import Regra
+from linguagem.gramatica.producao import Producao
 
 
 def lerEntrada(path: str):
@@ -26,12 +28,14 @@ def lerEntrada(path: str):
                         gramatica = Gramatica()
 
                     modo_gramatica = True
+
                     gramatica.addSimbolo(
-                        SimboloNaoTerminal(linha)
+                        decodificarGramatica(
+                            linha, gramatica.getSimbolosNaoTerminais())
                     )
 
                 elif (linha != ''):
-                    gramatica = Gramatica(linha)
+                    gramatica = decodificarSentenca(linha)
 
                 else:
                     modo_gramatica = False
@@ -50,6 +54,84 @@ def lerEntrada(path: str):
         exit()
 
     return gramaticas
+
+
+# Decodifica a string da sentença e retorna elementos
+def decodificarSentenca(sentenca: str):
+
+    # Gera símbolos não terminais em ordem alfabética
+    naoTerminal = (
+        SimboloNaoTerminal(chr(i)) for i in range(ord('A'), ord('Z'))
+    )
+
+    # Armazena os símbolos de controle
+    atual = SimboloNaoTerminal('S', True)
+    proximo = None
+
+    gramatica = Gramatica()
+
+    # Gera uma nova gramática para cada símbolo da sentença
+    for simbolo in sentenca:
+        proximo = next(naoTerminal)
+        atual.producao.addRegra(Regra([SimboloTerminal(simbolo), proximo]))
+        gramatica.addSimbolo(atual)
+        atual = proximo
+
+    # Insere a produção final na gramática (contendo apenas epsilon)
+    atual.producao.addRegra(Regra([Epsilon()]))
+    gramatica.addSimbolo(atual)
+
+    return gramatica
+
+
+# Decodifica a string da gramática e retorna elementos
+def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
+
+    # Separa o não-terminal das produções
+    [simbolo, regras] = strGramatica.split('::=')
+    simbolo = re.search('<(.*?)>', simbolo).group(1)
+
+    simbolo = SimboloNaoTerminal(simbolo, simbolo == 'S')
+
+    # Identifica as regras das produções
+    for strRegra in regras.split('|'):
+
+        strRegra = strRegra.strip()
+
+        # Identifica os símbolos da regra
+        regra = Regra([])
+        while strRegra:
+
+            strSimbolo = strRegra[0]
+
+            # Identifica símbolo não-terminal
+            if strSimbolo == '<':
+                strRegra = strRegra[1:].split('>', 1)
+                naoTerminal = SimboloNaoTerminal(strRegra[0])
+
+                for s in simbolosDaGramatica:
+                    if (s == simbolo):
+                        naoTerminal = s
+
+                simbolosDaGramatica.add(naoTerminal)
+                print(simbolosDaGramatica)
+                regra.addSimbolo(naoTerminal)
+                strRegra = strRegra[1]
+
+            else:
+                # Identifica símbolo épsilon
+                if strSimbolo == 'ε':
+                    regra.addSimbolo(Epsilon())
+
+                # Identifica símbolo terminal
+                elif strSimbolo != ' ':
+                    regra.addSimbolo(SimboloTerminal(strSimbolo))
+
+                strRegra = strRegra[1:]
+
+        simbolo.getProducao().addRegra(regra)
+
+    return simbolo
 
 
 if __name__ == '__main__':

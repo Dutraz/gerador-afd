@@ -7,9 +7,9 @@ def main():
     linguagem = Linguagem() 
     linguagem.setGramaticas(lerEntrada('../arquivos/entrada.txt'))
     linguagem.gerarAutomato()
+    print(linguagem)
 
     # print(linguagem.getAutomato())
-    print(linguagem)
 
 if __name__ == '__main__':
     main()
