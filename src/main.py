@@ -1,23 +1,15 @@
-from linguagem.gramatica.simbolo import Simbolo
-from linguagem.gramatica.regra import Regra
-from linguagem.gramatica import Gramatica
+from arquivo import lerEntrada
+from linguagem.automato.automato import Automato
+from linguagem.linguagem import Linguagem
 
 
 def main():
-    G = Gramatica()
+    linguagem = Linguagem() 
+    linguagem.setGramaticas(lerEntrada('../arquivos/entrada.txt'))
+    linguagem.gerarAutomato()
 
-    # S = Simbolo('S')
-    # S.producao.addRegra(Regra([Simbolo('a'), Simbolo('A')])).addRegra(Regra([Simbolo('b'), Simbolo('A')]))
-    # G.addSimbolo(S)
-    
-    # A = Simbolo('A')
-    # A.producao.addRegra(Regra([Simbolo('a'), Simbolo('S')])).addRegra(Regra([Simbolo('ε')]))
-    # G.addSimbolo(A)
-
-    G.porPalavra('entao')
-
-    print(G)
-
+    # print(linguagem.getAutomato())
+    print(linguagem)
 
 if __name__ == '__main__':
     main()

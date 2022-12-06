@@ -33,7 +33,7 @@ class Gramatica:
         )
 
         # Armazena os símbolos de controle
-        atual = SimboloNaoTerminal('S')
+        atual = SimboloNaoTerminal('S', True)
         proximo = None
         simbolos = []
 

@@ -1,13 +1,12 @@
 import re
 
 from linguagem.gramatica.simbolo import SimboloNaoTerminal
-from linguagem.linguagem import Linguagem
 from linguagem.gramatica.gramatica import Gramatica
 
 
 def lerEntrada(path: str):
 
-    linguagem = Linguagem()
+    gramaticas = []
 
     try:
         with open(path, encoding='utf-8') as arquivo:
@@ -39,18 +38,18 @@ def lerEntrada(path: str):
 
                 # No caso de estar lendo uma gramática, insere apenas no final
                 if (modo_gramatica == False and gramatica.getSimbolos() != []):
-                    linguagem.addGramatica(gramatica)
+                    gramaticas.append(gramatica)
                     gramatica = Gramatica([])
 
             # Caso chegue no final do arquivo com uma gramática em aberto
             if (modo_gramatica == True):
-                linguagem.addGramatica(gramatica)
+                gramaticas.append(gramatica)
 
     except Exception as e:
         print('Erro ao ler arquivo de log. ' + str(e))
         exit()
 
-    return linguagem
+    return gramaticas
 
 
 if __name__ == '__main__':

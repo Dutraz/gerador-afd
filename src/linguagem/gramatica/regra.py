@@ -3,13 +3,13 @@ import linguagem.gramatica.simbolo as s
 
 class Regra:
 
-    def __init__(self, argumento):
+    def __init__(self, argumento, simbolos = list()):
         if (argumento is s.Simbolo):
             self.simbolos = list(argumento)
         elif (isinstance(argumento, list)):
             self.simbolos = argumento
         elif (isinstance(argumento, str)):
-            self.simbolos = self.__decodificarGramatica(argumento)
+            self.simbolos = self.__decodificarGramatica(argumento, simbolos)
 
     def __str__(self):
         return ''.join([str(s) for s in self.simbolos])
@@ -18,8 +18,16 @@ class Regra:
         self.simbolos.append(simbolo)
         return self
 
+    def getSimbolos(self):
+        return self.simbolos
+
+    def getSimbolosNaoTerminais(self):
+        return (
+            x for x in self.simbolos if isinstance(x, s.SimboloNaoTerminal)
+        )
+
     # Decodifica a string da gramática e retorna elementos
-    def __decodificarGramatica(self, gramatica: str):
+    def __decodificarGramatica(self, gramatica: str, simbolosGramatica: list):
 
         simbolos = []
 
