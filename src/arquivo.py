@@ -90,12 +90,15 @@ def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
     # Separa o não-terminal das produções
     [simbolo, regras] = strGramatica.split('::=')
     simbolo = re.search('<(.*?)>', simbolo).group(1)
-
     simbolo = SimboloNaoTerminal(simbolo, simbolo == 'S')
+
+    for s in simbolosDaGramatica:
+        if (s == simbolo):
+            simbolo = s
 
     # Identifica as regras das produções
     for strRegra in regras.split('|'):
-
+        
         strRegra = strRegra.strip()
 
         # Identifica os símbolos da regra
@@ -110,11 +113,10 @@ def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
                 naoTerminal = SimboloNaoTerminal(strRegra[0])
 
                 for s in simbolosDaGramatica:
-                    if (s == simbolo):
+                    if (s == naoTerminal):
                         naoTerminal = s
 
                 simbolosDaGramatica.add(naoTerminal)
-                print(simbolosDaGramatica)
                 regra.addSimbolo(naoTerminal)
                 strRegra = strRegra[1]
 

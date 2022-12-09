@@ -69,7 +69,6 @@ class Automato:
                         )
 
                 for regra in simbolo.getProducao().getRegras():
-                    # print([str(s) for s in regra.getSimbolos()], end='\n\n')
 
                     terminais = [
                         str(s) for s in regra.getSimbolos() if isinstance(s, SimboloTerminal)
@@ -79,12 +78,15 @@ class Automato:
                         s for s in regra.getSimbolos() if isinstance(s, SimboloNaoTerminal)
                     ]
 
-                    simbolosUtilizados.update(naoTerminais)
-                    simbolosVerificar.update(naoTerminais)
-
                     estado.addTransicao(
                         ''.join(terminais), set(naoTerminais)
                     )
+
+                    simbolosUtilizados.update(naoTerminais)
+
+                    if (simbolo in naoTerminais):
+                        naoTerminais.remove(simbolo)
+                    simbolosVerificar.update(naoTerminais)
 
                 estados.append(estado)
 
