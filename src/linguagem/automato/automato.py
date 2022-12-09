@@ -1,6 +1,7 @@
 from linguagem.automato.estado import Estado
 from linguagem.gramatica.gramatica import Gramatica
-from linguagem.gramatica.simbolo import SimboloTerminal, SimboloNaoTerminal
+from linguagem.gramatica.simbolo import SimboloTerminal, SimboloNaoTerminal, Epsilon
+from prettytable import PrettyTable
 
 
 class Automato:
@@ -13,7 +14,34 @@ class Automato:
             self.estados = self.__carregarGramatica(argumento)
 
     def __str__(self):
-        return '\n'.join([f'{", ".join(e.naoTerminais)} = {e.getTransicoes()}' for e in self.estados])
+
+        terminais = set()
+
+        for e in self.estados:
+
+            if (e.getTransicoes()):
+                terminais.update(e.getTransicoes().keys())
+
+        terminais = list(terminais)
+
+        linhas = []
+
+        for e in self.estados:
+
+            transicoes = e.getTransicoes()
+            linha = [f'[{", ".join([s for s in e.getNaoTerminais()])}]']
+
+            for terminal in terminais:
+                if terminal in transicoes:
+                    linha.append(f'[{", ".join([t.getCaracter() for t in transicoes[terminal]])}]')
+                else:
+                    linha.append('')
+
+            linhas.append(linha)
+
+        tab = PrettyTable(list(['-', *terminais]))
+        tab.add_rows(linhas)
+        return str(tab)
 
     def addEstado(self, estado: Estado):
         self.estados.append(estado)
@@ -47,9 +75,10 @@ class Automato:
 
                         simbolosUtilizados.update(naoTerminais)
 
-                        inicial.addTransicao(
-                            ''.join(terminais), set(naoTerminais)
-                        )
+                        if (not isinstance(regra.getSimbolos()[0], Epsilon)):
+                            inicial.addTransicao(
+                                ''.join(terminais), set(naoTerminais)
+                            )
 
         estados = [inicial]
         simbolosVerificar = simbolosUtilizados.copy()
@@ -90,8 +119,4 @@ class Automato:
 
                 estados.append(estado)
 
-        # for estado in estados:
-        #     print(f'\n{estado} ==== ')
-        #     for transicao, estados in estado.getTransicoes().items():
-        #         print(f'{transicao}: {", ".join([str(e) for e in estados])}')
-
+        return estados

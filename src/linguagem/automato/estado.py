@@ -25,5 +25,8 @@ class Estado:
         self.transicoes[terminal] = estados
         return self
 
+    def getNaoTerminais(self):
+        return self.naoTerminais
+
     def getTransicoes(self):
         return self.transicoes
