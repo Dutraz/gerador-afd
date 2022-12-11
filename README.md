@@ -29,6 +29,12 @@ Acadêmico: **Pedro Zawadzki Dutra**
 Para executar o projeto você vai precisar:
 - [Python 3.x](https://www.python.org/downloads/)
 
+#### 1.1 Instale a biblioteca prettytable
+
+``` powershell
+pip install prettytable
+```
+
 ### **2. Configuração**
 
 Feito a instalação das dependências do projeto, é necessário obter uma cópia do projeto.

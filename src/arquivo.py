@@ -96,6 +96,8 @@ def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
         if (s == simbolo):
             simbolo = s
 
+    simbolosDaGramatica.add(simbolo)
+
     # Identifica as regras das produções
     for strRegra in regras.split('|'):
         

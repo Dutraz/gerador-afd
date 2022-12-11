@@ -18,18 +18,21 @@ class Automato:
         terminais = set()
 
         for e in self.estados:
-
             if (e.getTransicoes()):
                 terminais.update(e.getTransicoes().keys())
 
         terminais = list(terminais)
+        terminais.sort()
+
+        estados = list(self.estados)
+        estados.sort()
 
         linhas = []
 
-        for e in self.estados:
+        for e in estados:
 
             transicoes = e.getTransicoes()
-            linha = [f'[{", ".join([s for s in e.getNaoTerminais()])}]']
+            linha = [f'{"*" if e.isFinal() else " "}[{", ".join([s.getCaracter() for s in e.getNaoTerminais()])}]']
 
             for terminal in terminais:
                 if terminal in transicoes:
@@ -50,7 +53,7 @@ class Automato:
     # Transforma um array de gramáticas em um array de estados
     def __carregarGramatica(self, gramaticas: list[Gramatica]):
 
-        inicial = Estado('S')
+        inicial = Estado(SimboloNaoTerminal('S', True))
         simbolosUtilizados = set()
 
         for gramatica in gramaticas:
@@ -89,7 +92,7 @@ class Automato:
 
             if (not simbolo.isInicial()):
 
-                estado = Estado(simbolo.getCaracter())
+                estado = Estado(simbolo)
 
                 for naoTerminal in simbolo.getProducao().getSimbolosNaoTerminais():
                     while (naoTerminal in simbolosUtilizados):
@@ -107,9 +110,12 @@ class Automato:
                         s for s in regra.getSimbolos() if isinstance(s, SimboloNaoTerminal)
                     ]
 
-                    estado.addTransicao(
-                        ''.join(terminais), set(naoTerminais)
-                    )
+                    if (isinstance(regra.getSimbolos()[0], Epsilon)):
+                        estado.setFinal()
+                    else:
+                        estado.addTransicao(
+                            ''.join(terminais), set(naoTerminais)
+                        )
 
                     simbolosUtilizados.update(naoTerminais)
 

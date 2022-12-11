@@ -5,15 +5,19 @@ from linguagem.gramatica.gramatica import Gramatica
 class Estado:
 
     def __init__(self, argumento):
-        if (isinstance(argumento, str)):
-            self.naoTerminais = set(argumento)
-        elif (isinstance(argumento, set)):
+        if (isinstance(argumento, SimboloNaoTerminal)):
+            self.naoTerminais = [argumento]
+        elif (isinstance(argumento, list)):
             self.naoTerminais = argumento
 
+        self.final = False
         self.transicoes = dict()
 
     def __str__(self):
-        return ', '.join(self.naoTerminais)
+        return ', '.join([s.getCaracter() for s in self.naoTerminais])
+
+    def __lt__(self, other):
+        return str(self) < str(other)
 
     def addTransicao(self, terminal, estados: set):
         if (terminal not in self.transicoes):
@@ -25,8 +29,15 @@ class Estado:
         self.transicoes[terminal] = estados
         return self
 
+    def setFinal(self, final: bool = True):
+        self.final = final
+        return self
+
     def getNaoTerminais(self):
         return self.naoTerminais
 
     def getTransicoes(self):
         return self.transicoes
+
+    def isFinal(self):
+        return self.final
