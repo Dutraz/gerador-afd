@@ -9,9 +9,10 @@ def main():
     linguagem = Linguagem()
     linguagem.setGramaticas(lerEntrada('../arquivos/entrada.txt'))
     print(linguagem, end="\n\n=============\n\n")
-    linguagem.gerarAutomato()
+    linguagem.setGramaticas([linguagem.unificarGramaticas()])
     print(linguagem, end="\n\n=============\n\n")
-    print(linguagem.getAutomato())
+    linguagem.gerarAutomato()
+    print(linguagem.getAutomato(), end="\n\n=============\n\n")
 
 
 if __name__ == '__main__':

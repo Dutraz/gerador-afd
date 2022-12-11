@@ -11,13 +11,11 @@ class Estado:
             self.naoTerminais = argumento
 
         self.final = False
+        self.inicial = False
         self.transicoes = dict()
 
     def __str__(self):
-        return ', '.join([s.getCaracter() for s in self.naoTerminais])
-
-    def __lt__(self, other):
-        return str(self) < str(other)
+        return f'{"*" if self.isFinal() else ">" if self.isInicial() else ""}[{", ".join([s.getCaracter() for s in self.naoTerminais])}]'
 
     def addTransicao(self, terminal, estados: set):
         if (terminal not in self.transicoes):
@@ -33,6 +31,10 @@ class Estado:
         self.final = final
         return self
 
+    def setInicial(self, inicial: bool = True):
+        self.inicial = inicial
+        return self
+
     def getNaoTerminais(self):
         return self.naoTerminais
 
@@ -41,3 +43,6 @@ class Estado:
 
     def isFinal(self):
         return self.final
+
+    def isInicial(self):
+        return self.inicial

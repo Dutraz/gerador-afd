@@ -1,3 +1,4 @@
+from linguagem.gramatica.simbolo import SimboloNaoTerminal
 from linguagem.gramatica.gramatica import Gramatica
 from linguagem.automato.automato import Automato
 
@@ -25,3 +26,23 @@ class Linguagem:
 
     def getAutomato(self):
         return self.automato
+
+    def unificarGramaticas(self):
+        simboloInicial = SimboloNaoTerminal('S', True)
+        g = Gramatica()
+        g.addSimbolo(simboloInicial)
+
+        for gramatica in self.gramaticas:
+            for simbolo in gramatica.getSimbolos():
+                if (simbolo.isInicial()):
+                    for regra in simbolo.getProducao().getRegras():
+                        simboloInicial.getProducao().addRegra(regra)
+                else:
+                    while (simbolo in g.getSimbolos()):
+                        simbolo.setCaracter(
+                            chr(ord(simbolo.getCaracter()) + 1)
+                        )
+
+                    g.addSimbolo(simbolo)
+
+        return g
