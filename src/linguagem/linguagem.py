@@ -38,11 +38,10 @@ class Linguagem:
                     for regra in simbolo.getProducao().getRegras():
                         simboloInicial.getProducao().addRegra(regra)
                 else:
-                    while (simbolo in g.getSimbolos()):
+                    while (simbolo.getCaracter() in [s.getCaracter() for s in g.getSimbolos()]):
                         simbolo.setCaracter(
                             chr(ord(simbolo.getCaracter()) + 1)
                         )
 
                     g.addSimbolo(simbolo)
-
         return g

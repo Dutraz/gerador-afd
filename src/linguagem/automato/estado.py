@@ -15,7 +15,7 @@ class Estado:
         self.transicoes = dict()
 
     def __str__(self):
-        return f'{"*" if self.isFinal() else ">" if self.isInicial() else ""}[{", ".join([s.getCaracter() for s in self.naoTerminais])}]'
+        return f'{"*" if self.isFinal() else ">" if self.isInicial() else " "}[{", ".join([s.getCaracter() for s in self.naoTerminais])}]'
 
     def addTransicao(self, terminal, estados: set):
         if (terminal not in self.transicoes):

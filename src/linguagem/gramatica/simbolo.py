@@ -9,6 +9,9 @@ class Simbolo:
     def __str__(self):
         return self.caracter
 
+    def __hash__(self):
+        return hash(self.caracter)
+
     def getCaracter(self):
         return self.caracter
 
@@ -17,12 +20,6 @@ class SimboloTerminal(Simbolo):
 
     def __init__(self, caracter: str):
         super().__init__(caracter)
-
-    def __str__(self):
-        return self.caracter
-
-    def __hash__(self):
-        return hash(self.caracter)
 
 
 class Epsilon(Simbolo):
@@ -33,8 +30,8 @@ class Epsilon(Simbolo):
 
 class SimboloNaoTerminal(Simbolo):
 
-    def __init__(self, texto: str, inicial: bool = False):
-        super().__init__(texto)
+    def __init__(self, caracter: str, inicial: bool = False):
+        super().__init__(caracter)
         self.producao = Producao()
         self.inicial = inicial
 
@@ -42,22 +39,22 @@ class SimboloNaoTerminal(Simbolo):
         return f'<{self.caracter}>'
 
     def __hash__(self):
-        return hash(self.caracter)
+        return hash((self.caracter, self.producao))
 
     def __eq__(self, other):
-        return self.caracter == other.caracter
+        return other and self.caracter == other.caracter and self.producao == other.producao
 
     def setCaracter(self, caracter: str):
         self.caracter = caracter
 
-    def setInicial(self, inicial: bool = True):
-        self.inicial = inicial
-
     def getCaracter(self):
         return self.caracter
 
-    def getProducao(self):
-        return self.producao
+    def setInicial(self, inicial: bool = True):
+        self.inicial = inicial
 
     def isInicial(self):
         return self.inicial
+
+    def getProducao(self):
+        return self.producao

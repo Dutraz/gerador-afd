@@ -93,7 +93,7 @@ def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
     simbolo = SimboloNaoTerminal(simbolo, simbolo == 'S')
 
     for s in simbolosDaGramatica:
-        if (s == simbolo):
+        if (s.getCaracter() == simbolo.getCaracter()):
             simbolo = s
 
     simbolosDaGramatica.add(simbolo)
@@ -115,7 +115,7 @@ def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
                 naoTerminal = SimboloNaoTerminal(strRegra[0])
 
                 for s in simbolosDaGramatica:
-                    if (s == naoTerminal):
+                    if (s.getCaracter() == naoTerminal.getCaracter()):
                         naoTerminal = s
 
                 simbolosDaGramatica.add(naoTerminal)
