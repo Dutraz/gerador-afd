@@ -4,10 +4,10 @@ from linguagem.gramatica.gramatica import Gramatica
 
 class Estado:
 
-    def __init__(self, naoTerminais: set[SimboloNaoTerminal] = None):
+    def __init__(self, naoTerminais: set[SimboloNaoTerminal] = None, inicial: bool = False, final: bool = False):
         self.naoTerminais = naoTerminais or set()
-        self.final = False
-        self.inicial = False
+        self.final = inicial
+        self.inicial = final
         self.transicoes = dict()
 
     def __str__(self):
@@ -28,6 +28,9 @@ class Estado:
 
     def getTransicoes(self) -> dict:
         return self.transicoes
+
+    def getTransicoesPor(self, terminal: SimboloTerminal) -> set[SimboloNaoTerminal]:
+        return self.transicoes.get(terminal, None)
 
     def setFinal(self, final: bool = True) -> 'Estado':
         self.final = final

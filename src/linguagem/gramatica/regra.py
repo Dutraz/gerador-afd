@@ -26,3 +26,11 @@ class Regra:
         return {
             x for x in self.simbolos if isinstance(x, s.SimboloNaoTerminal)
         }
+
+    def getSimbolosTerminais(self) -> list['s.SimboloTerminal']:
+        return {
+            x for x in self.simbolos if isinstance(x, s.SimboloTerminal)
+        }
+
+    def isFinal(self) -> bool:
+        return isinstance(self.simbolos[0], s.Epsilon)

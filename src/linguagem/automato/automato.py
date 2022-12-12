@@ -14,33 +14,21 @@ class Automato:
 
     def __str__(self):
 
-        terminais = set()
-
-        for e in self.estados:
-            if (e.getTransicoes()):
-                terminais.update(e.getTransicoes().keys())
-
-        terminais = sorted(terminais)
-        # naoTerminais = sorted(self.estados, key=Estado.estado)
-
-        linhas = []
-
-        for e in self.estados:
-
-            transicoes = e.getTransicoes()
-            linha = [str(e)]
-
-            for terminal in terminais:
-                if terminal in transicoes:
-                    linha.append(
-                        f'[{",".join([t.getCaracter() for t in transicoes[terminal]])}]')
-                else:
-                    linha.append('')
-
-            linhas.append(linha)
+        terminais = sorted({
+            transicoes for e in self.estados for transicoes in e.getTransicoes().keys()
+        })
 
         tab = PrettyTable(list(['-', *terminais]))
-        tab.add_rows(linhas)
+
+        for e in self.estados:
+            linha = [str(e)]
+            for terminal in terminais:
+                transicoes = e.getTransicoesPor(terminal)
+                linha.append(
+                    f'[{",".join([t.getCaracter() for t in transicoes])}]'
+                    if transicoes else '-'
+                )
+            tab.add_row(linha)
         return str(tab)
 
     def addEstado(self, estado: Estado):
@@ -50,44 +38,39 @@ class Automato:
     # Transforma uma gramática em um array de estados
     def __carregarGramatica(self, gramatica: Gramatica) -> list[Estado]:
 
+        # Filtra apenas o símbolo inicial da gramática
         simboloInicial = next(filter(
             lambda x: x.isInicial(), gramatica.getSimbolos()
         ))
-
-        estados = []
         simbolosVerificar = {simboloInicial}
+        estados = []
 
+        # Enquanto houverem símbolos a verificar, cria um estado para cada símbolo alcançado
         while simbolosVerificar != set():
 
             simbolo = simbolosVerificar.pop()
-            estado = Estado({simbolo}).setInicial(simbolo.getCaracter() == 'S')
-
             regras = simbolo.getProducao().getRegras()
 
-            if (regras == []):
-                estado.setFinal()
-            else:
-                for regra in regras:
+            estado = Estado(
+                {simbolo},
+                simbolo.getCaracter() == 'S',  # Estado Inicial
+                regras == []  # Estado Final
+            )
 
-                    terminais = [
-                        str(s) for s in regra.getSimbolos() if isinstance(s, SimboloTerminal)
-                    ]
+            for regra in regras:
+                estado.setFinal(regra.isFinal())
 
-                    naoTerminais = [
-                        s for s in regra.getSimbolos() if isinstance(s, SimboloNaoTerminal)
-                    ]
+                # Cria novas transições para cada regra da gramática
+                if (not estado.isFinal()):
+                    estado.addTransicao(
+                        ''.join([
+                            s.getCaracter() for s in regra.getSimbolosTerminais()
+                        ]), regra.getSimbolosNaoTerminais()
+                    )
 
-                    if (isinstance(regra.getSimbolos()[0], Epsilon)):
-                        estado.setFinal()
-                    else:
-                        estado.addTransicao(
-                            ''.join(terminais), set(naoTerminais)
-                        )
-
-                    if (simbolo in naoTerminais):
-                        naoTerminais.remove(simbolo)
-
-                    simbolosVerificar.update(naoTerminais)
+                    simbolosVerificar.update(
+                        regra.getSimbolosNaoTerminais() - {simbolo}
+                    )
 
             estados.append(estado)
 
