@@ -12,7 +12,7 @@ class Simbolo:
     def __hash__(self):
         return hash(self.caracter)
 
-    def getCaracter(self):
+    def getCaracter(self) -> str:
         return self.caracter
 
 
@@ -44,17 +44,16 @@ class SimboloNaoTerminal(Simbolo):
     def __eq__(self, other):
         return other and self.caracter == other.caracter and self.producao == other.producao
 
-    def setCaracter(self, caracter: str):
+    def setCaracter(self, caracter: str) -> 'SimboloNaoTerminal':
         self.caracter = caracter
+        return self
 
-    def getCaracter(self):
-        return self.caracter
-
-    def setInicial(self, inicial: bool = True):
+    def setInicial(self, inicial: bool = True) -> 'SimboloNaoTerminal':
         self.inicial = inicial
+        return self
 
-    def isInicial(self):
+    def isInicial(self) -> bool:
         return self.inicial
 
-    def getProducao(self):
+    def getProducao(self) -> bool:
         return self.producao

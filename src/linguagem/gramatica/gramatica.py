@@ -1,4 +1,4 @@
-from linguagem.gramatica.simbolo import SimboloNaoTerminal
+from linguagem.gramatica.simbolo import SimboloNaoTerminal, Simbolo
 
 
 class Gramatica:
@@ -9,14 +9,14 @@ class Gramatica:
     def __str__(self):
         return '\n'.join([f'{r}::= {r.producao}' for r in self.simbolos])
 
-    def addSimbolo(self, simbolo: SimboloNaoTerminal):
+    def addSimbolo(self, simbolo: SimboloNaoTerminal) -> 'Gramatica':
         self.simbolos.append(simbolo)
         return self
 
-    def getSimbolos(self):
+    def getSimbolos(self) -> Simbolo:
         return self.simbolos
 
-    def getSimbolosNaoTerminais(self):
+    def getSimbolosNaoTerminais(self) -> set[Simbolo]:
         return {
             simbolo for s in self.simbolos for simbolo in s.getProducao().getSimbolosNaoTerminais()
         }

@@ -15,14 +15,14 @@ class Regra:
     def __eq__(self, other):
         return other and str(self) == str(other)
 
-    def addSimbolo(self, simbolo):
+    def addSimbolo(self, simbolo: 's.Simbolo') -> 'Regra':
         self.simbolos.append(simbolo)
         return self
 
-    def getSimbolos(self):
+    def getSimbolos(self) -> list['s.Simbolo']:
         return self.simbolos
 
-    def getSimbolosNaoTerminais(self):
+    def getSimbolosNaoTerminais(self) -> list['s.SimboloNaoTerminal']:
         return {
             x for x in self.simbolos if isinstance(x, s.SimboloNaoTerminal)
         }

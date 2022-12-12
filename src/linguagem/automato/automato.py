@@ -9,7 +9,6 @@ class Automato:
     def __init__(self, argumento):
         if (argumento is list[Estado]):
             self.estados = argumento
-        # TODO: Arrumar aqui
         else:
             self.estados = self.__carregarGramatica(argumento[0])
 
@@ -49,7 +48,7 @@ class Automato:
         return self
 
     # Transforma uma gramática em um array de estados
-    def __carregarGramatica(self, gramatica: Gramatica):
+    def __carregarGramatica(self, gramatica: Gramatica) -> list[Estado]:
 
         simboloInicial = next(filter(
             lambda x: x.isInicial(), gramatica.getSimbolos()
@@ -61,7 +60,7 @@ class Automato:
         while simbolosVerificar != set():
 
             simbolo = simbolosVerificar.pop()
-            estado = Estado(simbolo).setInicial(simbolo.getCaracter() == 'S')
+            estado = Estado({simbolo}).setInicial(simbolo.getCaracter() == 'S')
 
             regras = simbolo.getProducao().getRegras()
 
