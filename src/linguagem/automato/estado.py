@@ -11,14 +11,17 @@ class Estado:
         self.transicoes = dict()
 
     def __str__(self):
-        return f'{"*" if self.isFinal() else ">" if self.isInicial() else " "}[{", ".join([s.getCaracter() for s in self.naoTerminais])}]'
+        return f'{">" if self.isInicial() else ""}[{", ".join([s.getCaracter() for s in self.naoTerminais])}]{"*" if self.isFinal() else ""}'
 
-    def addNaoTerminal(self, simbolo: SimboloNaoTerminal) -> 'Estado':
-        self.naoTerminais.add(simbolo)
-        return self
-
-    def getNaoTerminais(self) -> set[SimboloNaoTerminal]:
-        return self.naoTerminais
+    def __eq__(self, other):
+        if isinstance(other, Estado):
+            return self.getCaracteres() == other.getCaracteres()
+        elif isinstance(other, str):
+            return self.getCaracteres() == other
+        elif isinstance(other, SimboloNaoTerminal):
+            return self.getCaracteres() == other.getCaracter()
+        else:
+            return False
 
     def addTransicao(self, terminal: SimboloTerminal, estados: set[SimboloNaoTerminal]) -> 'Estado':
         if (terminal not in self.transicoes):
@@ -43,5 +46,17 @@ class Estado:
         self.inicial = inicial
         return self
 
-    def isInicial(self) -> bool:
+    def getNaoTerminais(self):
+        return self.naoTerminais
+
+    def getCaracteres(self):
+        return ','.join(sorted([e.getCaracter() for e in self.naoTerminais]))
+
+    def getTransicoes(self):
+        return self.transicoes
+
+    def isFinal(self):
+        return self.final
+
+    def isInicial(self):
         return self.inicial

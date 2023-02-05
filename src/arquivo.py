@@ -22,7 +22,11 @@ def lerEntrada(path: str):
                 # Remove as quebras de linha da string
                 linha = re.sub('\n|\r', '', linha).strip()
 
-                # Identifica qual o tipo de leitura (sentença/gramatica/linha em branco)
+                # Remove os comentarios das linhas
+                if ('//' in linha):
+                    linha = linha.split('//')[0]
+
+                # Identifica qual o tipo de leitura (sentença/gramatica/linha em branco/comentario)
                 if ('::=' in linha):
                     if (modo_gramatica == False):
                         gramatica = Gramatica()

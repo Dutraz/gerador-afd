@@ -42,7 +42,12 @@ class SimboloNaoTerminal(Simbolo):
         return hash((self.caracter, self.producao))
 
     def __eq__(self, other):
-        return other and self.caracter == other.caracter and self.producao == other.producao
+        if (isinstance(other, Simbolo)):
+            return self.caracter == other.caracter
+        elif (isinstance(other, str)):
+            return self.caracter == other
+        else:
+            return False
 
     def setCaracter(self, caracter: str) -> 'SimboloNaoTerminal':
         self.caracter = caracter

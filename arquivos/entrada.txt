@@ -2,5 +2,21 @@ se
 entao
 senao
 
-<S> ::= a<A> | e<A> | i<A> | o<A> | u<A>
+<S> ::= a<A> | e<A> | i<A> | o<A> | u<A> | j<B>
 <A> ::= a<A> | e<A> | i<A> | o<A> | u<A> | ε
+<B> ::= a<B>
+
+//<S> ::= a<B> | c<A> | b<B>
+//<A> ::= c<S> | d<B> | c<C> | ε
+//<B> ::= c<S> | a | ε
+//<C> ::= b<B> | b<A>
+
+//<S> ::= b<E> | c<C>
+//<A> ::= a<F> | c<G> | d<E>
+//<B> ::= b<G> | d<E>
+//<C> ::= a<B> | c<S> | d<F> | ε
+//<D> ::= b<D> | c<H>
+//<E> ::= a<C> | b<F> | d<A>
+//<F> ::= a<F> | c<F>
+//<G> ::= a<S> | c<F> | d<E> | ε
+//<H> ::= b<H> | d<D>
