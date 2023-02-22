@@ -1,13 +1,11 @@
 import re
 
-from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
 from linguagem.gramatica.gramatica import Gramatica
 from linguagem.gramatica.regra import Regra
-from linguagem.gramatica.producao import Producao
+from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
 
 
 def lerEntrada(path: str):
-
     gramaticas = []
 
     try:
@@ -35,7 +33,8 @@ def lerEntrada(path: str):
 
                     gramatica.addSimbolo(
                         decodificarGramatica(
-                            linha, gramatica.getSimbolosNaoTerminais())
+                            linha, gramatica.getSimbolosNaoTerminais()
+                        )
                     )
 
                 elif (linha != ''):
@@ -62,7 +61,6 @@ def lerEntrada(path: str):
 
 # Decodifica a string da sentença e retorna elementos
 def decodificarSentenca(sentenca: str):
-
     # Gera símbolos não terminais em ordem alfabética
     naoTerminal = (
         SimboloNaoTerminal(chr(i)) for i in range(ord('A'), ord('Z'))
@@ -90,7 +88,6 @@ def decodificarSentenca(sentenca: str):
 
 # Decodifica a string da gramática e retorna elementos
 def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
-
     # Separa o não-terminal das produções
     [simbolo, regras] = strGramatica.split('::=')
     simbolo = re.search('<(.*?)>', simbolo).group(1)
@@ -104,7 +101,6 @@ def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
 
     # Identifica as regras das produções
     for strRegra in regras.split('|'):
-        
         strRegra = strRegra.strip()
 
         # Identifica os símbolos da regra
@@ -121,6 +117,7 @@ def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
                 for s in simbolosDaGramatica:
                     if (s.getCaracter() == naoTerminal.getCaracter()):
                         naoTerminal = s
+                        break
 
                 simbolosDaGramatica.add(naoTerminal)
                 regra.addSimbolo(naoTerminal)

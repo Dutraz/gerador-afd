@@ -1,6 +1,6 @@
-from linguagem.gramatica.simbolo import SimboloNaoTerminal
-from linguagem.gramatica.gramatica import Gramatica
 from linguagem.automato.automato import Automato
+from linguagem.gramatica.gramatica import Gramatica
+from linguagem.gramatica.simbolo import SimboloNaoTerminal
 
 
 class Linguagem:
@@ -47,4 +47,10 @@ class Linguagem:
                             chr(ord(simbolo.getCaracter()) + 1)
                         )
                     g.addSimbolo(simbolo)
+
+                # Substituindo o S nas regras pelo novo S instanciado
+                for regra in simbolo.getProducao().getRegras():
+                    for i, s in enumerate(regra.getSimbolos()):
+                        if isinstance(s, SimboloNaoTerminal) and s.isInicial():
+                            regra.getSimbolos()[i] = simboloInicial
         return g

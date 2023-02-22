@@ -1,17 +1,21 @@
 from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal
-from linguagem.gramatica.gramatica import Gramatica
 
 
 class Estado:
 
     def __init__(self, naoTerminais: set[SimboloNaoTerminal] = None, inicial: bool = False, final: bool = False):
         self.naoTerminais = naoTerminais or set()
-        self.final = inicial
-        self.inicial = final
+        self.inicial = inicial
+        self.final = final
         self.transicoes = dict()
 
     def __str__(self):
-        return f'{">" if self.isInicial() else ""}[{", ".join([s.getCaracter() for s in self.naoTerminais])}]{"*" if self.isFinal() else ""}'
+        return f'[{",".join(sorted([s.getCaracter() for s in self.naoTerminais]))}]'
+        # DEBUG ONLY
+        # return f'[{", ".join(sorted([s.getCaracter() for s in self.naoTerminais]))}]({str(id(self))[-4:]})'
+
+    def __hash__(self):
+        return self.getCaracteres()
 
     def __eq__(self, other):
         if isinstance(other, Estado):
@@ -23,27 +27,21 @@ class Estado:
         else:
             return False
 
-    def addTransicao(self, terminal: SimboloTerminal, estados: set[SimboloNaoTerminal]) -> 'Estado':
-        if (terminal not in self.transicoes):
-            self.transicoes[terminal] = set()
-        self.transicoes[terminal].update(estados)
+    def getIdentificador(self):
+        return f'{">" if self.isInicial() else ""}{str(self)}{"*" if self.isFinal() else ""}'
+
+    def addTransicao(self, terminal: SimboloTerminal, estado: set['Estado']) -> 'Estado':
+        self.transicoes[terminal] = estado
         return self
 
     def getTransicoes(self) -> dict:
         return self.transicoes
 
-    def getTransicoesPor(self, terminal: SimboloTerminal) -> set[SimboloNaoTerminal]:
+    def getTransicaoPor(self, terminal: SimboloTerminal) -> set['Estado']:
         return self.transicoes.get(terminal, None)
 
-    def setFinal(self, final: bool = True) -> 'Estado':
-        self.final = final
-        return self
-
-    def isFinal(self) -> bool:
-        return self.final
-
-    def setInicial(self, inicial: bool = True) -> 'Estado':
-        self.inicial = inicial
+    def addNaoTerminais(self, naoTerminal):
+        self.naoTerminais.update(naoTerminal)
         return self
 
     def getNaoTerminais(self):
@@ -52,11 +50,30 @@ class Estado:
     def getCaracteres(self):
         return ','.join(sorted([e.getCaracter() for e in self.naoTerminais]))
 
-    def getTransicoes(self):
-        return self.transicoes
-
-    def isFinal(self):
-        return self.final
+    def setInicial(self, inicial: bool = True) -> 'Estado':
+        self.inicial = inicial
+        return self
 
     def isInicial(self):
         return self.inicial
+
+    def setFinal(self, final: bool = True) -> 'Estado':
+        self.final = final
+        return self
+
+    def isFinal(self) -> bool:
+        return self.final
+
+    def ehMorto(self, verificados=[]) -> bool:
+        if self.isFinal():
+            return False
+        if self in verificados:
+            return True
+
+        verificados.append(self)
+
+        for estado in self.transicoes.values():
+            if not estado.ehMorto(verificados):
+                return False
+
+        return True

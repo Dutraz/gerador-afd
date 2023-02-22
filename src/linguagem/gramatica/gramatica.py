@@ -17,6 +17,8 @@ class Gramatica:
         return self.simbolos
 
     def getSimbolosNaoTerminais(self) -> set[Simbolo]:
-        return {
+        naoTerminais = {
             simbolo for s in self.simbolos for simbolo in s.getProducao().getSimbolosNaoTerminais()
         }
+        naoTerminais.update(set([s for s in self.simbolos]))
+        return naoTerminais

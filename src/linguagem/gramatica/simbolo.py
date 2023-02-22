@@ -37,6 +37,8 @@ class SimboloNaoTerminal(Simbolo):
 
     def __str__(self):
         return f'<{self.caracter}>'
+        # Debug only
+        # return f'<{self.caracter}({str(id(self))[-4:]})>'
 
     def __hash__(self):
         return hash((self.caracter, self.producao))
