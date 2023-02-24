@@ -1,6 +1,6 @@
 from linguagem.automato.automato import Automato
 from linguagem.gramatica.gramatica import Gramatica
-from linguagem.gramatica.simbolo import SimboloNaoTerminal
+from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
 
 
 class Linguagem:
@@ -54,3 +54,21 @@ class Linguagem:
                         if isinstance(s, SimboloNaoTerminal) and s.isInicial():
                             regra.getSimbolos()[i] = simboloInicial
         return g
+
+    def rmEpsilonTransicoes(self):
+        alteracao = True
+
+        gramaticas = self.gramaticas
+
+        while alteracao:
+            alteracao = False
+            for gramatica in gramaticas:
+                for simbolo in gramatica.getSimbolos():
+                    for regra in simbolo.getProducao().getRegras():
+                        if True not in [isinstance(s, (SimboloTerminal, Epsilon)) for s in regra.getSimbolos()]:
+                            alteracao = True
+                            for regra_mover in regra.getSimbolos()[0].getProducao().getRegras():
+                                simbolo.getProducao().addRegra(regra_mover)
+                            simbolo.getProducao().getRegras().remove(regra)
+
+        return gramaticas

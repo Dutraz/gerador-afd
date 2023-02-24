@@ -134,8 +134,11 @@ class Automato:
 
         # Itera sobre os símbolos da gramática e transforma-os em estados
         for estado in verificar:
+            # print(f'{estado} -- {[str(v) for v in verificar]}')
             for simbolo in estado.getNaoTerminais():
+                # print(f'  {simbolo}')
                 for regra in simbolo.getProducao().getRegras():
+                    # print(f'    {regra}')
                     estado.setFinal(estado.isFinal() or regra.isFinal())
 
                     # Cria transições para cada regra não-terminal da gramática
@@ -152,8 +155,8 @@ class Automato:
                                 naoTerminais = {novoNaoTerminal}
 
                         terminais = ''.join([
-                            s.getCaracter() for s in regra.getSimbolosTerminais()
-                        ])
+                                                s.getCaracter() for s in regra.getSimbolosTerminais()
+                                            ] or 'ε')
 
                         novaTransicao = Estado(
                             naoTerminais,
@@ -174,13 +177,29 @@ class Automato:
                                 terminais,
                                 novaTransicao
                             )
-                        else:
-                            estados.append(Estado(
+                        elif transicao != novaTransicao:
+                            # print(f'      AQUI!')
+
+                            # Criar novo estado com ambas as transições
+                            composto = Estado(
                                 set(transicao.getNaoTerminais()),
                                 False,
                                 regra.isFinal()
-                            ))
-                            transicao.addNaoTerminais(regra.getSimbolosNaoTerminais())
-                            estados.remove(transicao)
+                            )
+                            composto.addNaoTerminais(regra.getSimbolosNaoTerminais())
+
+                            # print(f'        {composto}')
+
+                            if composto in verificar:
+                                composto = verificar[verificar.index(composto)]
+                                # print('=======================================')
+                                # print(composto)
+
+                            # Associar novo estado à transição
+                            estado.getTransicoes()[terminais] = composto
+
+                            if composto not in verificar:
+                                verificar.append(composto)
+
 
         return estados

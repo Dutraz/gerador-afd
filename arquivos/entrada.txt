@@ -2,9 +2,9 @@ se
 entao
 senao
 
-<S> ::= a<A> | e<A> | i<A> | o<A> | u<A> | z<B>
-<A> ::= a<A> | e<A> | i<A> | o<A> | u<A> | ε
-<B> ::= a<B>
+<S> ::= a<A> | e<A> | i<A> | o<A> | u<A> //| z<B> | <A>
+<A> ::= a<A> | e<A> | i<A> | o<A> | u<A> | ε //| <B>
+//<B> ::= a<B>
 
 //<S> ::= a<B> | c<A> | b<B>
 //<A> ::= c<S> | d<B> | c<C> | ε

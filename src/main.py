@@ -16,6 +16,10 @@ def main():
     linguagem.setGramaticas([linguagem.unificarGramaticas()])
     print(linguagem, end="\n\n=============\n\n")
 
+    print('\nREMOVENDO EPSILON TRANSIÇÕES...\n')
+    linguagem.setGramaticas(linguagem.rmEpsilonTransicoes())
+    print(linguagem, end="\n\n=============\n\n")
+
     print('\nGERANDO AUTÔMATO FINITO...\n')
     linguagem.gerarAutomato()
     print(linguagem.getAutomato(), end="\n\n=============\n\n")

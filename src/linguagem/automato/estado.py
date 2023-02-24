@@ -19,6 +19,7 @@ class Estado:
 
     def __eq__(self, other):
         if isinstance(other, Estado):
+            # print(self.getCaracteres(), other.getCaracteres())
             return self.getCaracteres() == other.getCaracteres()
         elif isinstance(other, str):
             return self.getCaracteres() == other
