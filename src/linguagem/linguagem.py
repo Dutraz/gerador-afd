@@ -36,12 +36,12 @@ class Linguagem:
         # Unifica todas as gramáticas compartilhando apenas o <S>
         for gramatica in self.gramaticas:
             for simbolo in gramatica.getSimbolos():
-                # Se é simbolo inicial, soma às gramáticas de S
+                # Se é tabela inicial, soma às gramáticas de S
                 if (simbolo.isInicial()):
                     for regra in simbolo.getProducao().getRegras():
                         simboloInicial.getProducao().addRegra(regra)
                 else:
-                    # Se não é simbolo inicial, procura por símbolo ainda não utilizado
+                    # Se não é tabela inicial, procura por símbolo ainda não utilizado
                     while (simbolo.getCaracter() in [s.getCaracter() for s in g.getSimbolos()]):
                         simbolo.setCaracter(
                             chr(ord(simbolo.getCaracter()) + 1)

@@ -115,7 +115,7 @@ class Automato:
     # Transforma uma gramática em um array de estados
     def __carregarGramatica(self, gramatica: Gramatica) -> list[Estado]:
 
-        # Função auxiliar para gerar simbolos não terminais
+        # Função auxiliar para gerar tabela não terminais
         geradorNaoTerminal = (
             SimboloNaoTerminal(chr(i)) for i in range(ord('A'), ord('Z'))
         )
@@ -134,11 +134,8 @@ class Automato:
 
         # Itera sobre os símbolos da gramática e transforma-os em estados
         for estado in verificar:
-            # print(f'{estado} -- {[str(v) for v in verificar]}')
             for simbolo in estado.getNaoTerminais():
-                # print(f'  {simbolo}')
                 for regra in simbolo.getProducao().getRegras():
-                    # print(f'    {regra}')
                     estado.setFinal(estado.isFinal() or regra.isFinal())
 
                     # Cria transições para cada regra não-terminal da gramática
@@ -154,9 +151,11 @@ class Automato:
                                 gramatica.addSimbolo(novoNaoTerminal)
                                 naoTerminais = {novoNaoTerminal}
 
-                        terminais = ''.join([
-                                                s.getCaracter() for s in regra.getSimbolosTerminais()
-                                            ] or 'ε')
+                        terminais = ''.join(
+                            [
+                                s.getCaracter() for s in regra.getSimbolosTerminais()
+                            ] or 'ε'
+                        )
 
                         novaTransicao = Estado(
                             naoTerminais,
@@ -178,7 +177,6 @@ class Automato:
                                 novaTransicao
                             )
                         elif transicao != novaTransicao:
-                            # print(f'      AQUI!')
 
                             # Criar novo estado com ambas as transições
                             composto = Estado(
@@ -188,18 +186,14 @@ class Automato:
                             )
                             composto.addNaoTerminais(regra.getSimbolosNaoTerminais())
 
-                            # print(f'        {composto}')
-
+                            # Verifica se o estado já foi criado e está na fila verificação
                             if composto in verificar:
                                 composto = verificar[verificar.index(composto)]
-                                # print('=======================================')
-                                # print(composto)
 
                             # Associar novo estado à transição
                             estado.getTransicoes()[terminais] = composto
 
                             if composto not in verificar:
                                 verificar.append(composto)
-
 
         return estados

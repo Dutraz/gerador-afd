@@ -5,7 +5,7 @@ from linguagem.gramatica.regra import Regra
 from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
 
 
-def lerEntrada(path: str):
+def ler_linguagem(path: str):
     gramaticas = []
 
     try:
@@ -140,4 +140,4 @@ def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
 
 
 if __name__ == '__main__':
-    print(lerEntrada('../arquivos/entrada.txt'))
+    print(ler_linguagem('../arquivos/linguagem.txt'))
