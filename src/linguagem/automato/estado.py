@@ -1,4 +1,4 @@
-from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal
+from src.linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal
 
 
 class Estado:

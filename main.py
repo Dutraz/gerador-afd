@@ -1,9 +1,9 @@
 import os
 
-from arquivo_fonte import ler_fonte
-from arquivo_linguagem import ler_linguagem
-from linguagem.linguagem import Linguagem
-from reconhecedor.lexico import AnalisadorLexico
+from src.arquivo_fonte import ler_fonte
+from src.arquivo_linguagem import ler_linguagem
+from src.linguagem.linguagem import Linguagem
+from src.reconhecedor.lexico import AnalisadorLexico
 
 
 def main():
@@ -11,7 +11,7 @@ def main():
 
     print('\nRECONHECENDO SENTENÇAS E GRAMÁTICAS...\n')
     linguagem = Linguagem()
-    linguagem.setGramaticas(ler_linguagem('../arquivos/linguagem.txt'))
+    linguagem.setGramaticas(ler_linguagem('arquivos/linguagem.txt'))
     print(linguagem, end="\n\n=============\n\n")
 
     print('\nUNIFICANDO GRAMÁTICAS...\n')
@@ -44,7 +44,7 @@ def main():
     print('============================================\n')
     analisador_lexico = AnalisadorLexico(
         linguagem,
-        ler_fonte('../arquivos/fonte.txt')
+        ler_fonte('arquivos/fonte.txt')
     )
 
     print('\nCRIANDO FITA DE LEITURA...\n')

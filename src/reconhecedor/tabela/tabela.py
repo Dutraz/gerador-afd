@@ -1,5 +1,5 @@
 from prettytable import PrettyTable
-from reconhecedor.tabela.simbolo import Simbolo
+from src.reconhecedor.tabela.simbolo import Simbolo
 
 
 class Tabela:

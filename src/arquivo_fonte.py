@@ -1,4 +1,4 @@
-from reconhecedor.tabela.simbolo import Simbolo
+from src.reconhecedor.tabela.simbolo import Simbolo
 
 SEPARADOR = ' '
 

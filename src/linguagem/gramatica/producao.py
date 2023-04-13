@@ -1,4 +1,4 @@
-from linguagem.gramatica.regra import Regra
+from src.linguagem.gramatica.regra import Regra
 
 
 class Producao:

@@ -1,8 +1,8 @@
 import re
 
-from linguagem.gramatica.gramatica import Gramatica
-from linguagem.gramatica.regra import Regra
-from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
+from src.linguagem.gramatica.gramatica import Gramatica
+from src.linguagem.gramatica.regra import Regra
+from src.linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
 
 
 def ler_linguagem(path: str):
@@ -53,7 +53,7 @@ def ler_linguagem(path: str):
                 gramaticas.append(gramatica)
 
     except Exception as e:
-        print('Erro ao ler arquivo de log. ' + str(e))
+        print('Erro ao ler arquivo da linguagem. ' + str(e))
         exit()
 
     return gramaticas

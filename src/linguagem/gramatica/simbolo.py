@@ -1,4 +1,4 @@
-from linguagem.gramatica.producao import Producao
+from src.linguagem.gramatica.producao import Producao
 
 
 class Simbolo:

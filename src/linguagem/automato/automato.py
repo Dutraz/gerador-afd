@@ -1,6 +1,6 @@
-from linguagem.automato.estado import Estado
-from linguagem.gramatica.gramatica import Gramatica
-from linguagem.gramatica.simbolo import SimboloNaoTerminal
+from src.linguagem.automato.estado import Estado
+from src.linguagem.gramatica.gramatica import Gramatica
+from src.linguagem.gramatica.simbolo import SimboloNaoTerminal
 from prettytable import PrettyTable
 
 

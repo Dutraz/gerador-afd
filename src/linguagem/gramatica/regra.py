@@ -1,4 +1,4 @@
-import linguagem.gramatica.simbolo as s
+import src.linguagem.gramatica.simbolo as s
 
 
 class Regra:

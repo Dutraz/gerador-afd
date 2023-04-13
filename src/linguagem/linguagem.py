@@ -1,6 +1,6 @@
-from linguagem.automato.automato import Automato
-from linguagem.gramatica.gramatica import Gramatica
-from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
+from src.linguagem.automato.automato import Automato
+from src.linguagem.gramatica.gramatica import Gramatica
+from src.linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
 
 
 class Linguagem:
