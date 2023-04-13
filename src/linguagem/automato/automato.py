@@ -1,7 +1,8 @@
+from prettytable import PrettyTable
+
 from src.linguagem.automato.estado import Estado
 from src.linguagem.gramatica.gramatica import Gramatica
 from src.linguagem.gramatica.simbolo import SimboloNaoTerminal
-from prettytable import PrettyTable
 
 
 class Automato:
@@ -9,20 +10,20 @@ class Automato:
     # Construtor do Autômato
     def __init__(self, arg):
         # Se o argumento for uma lista de estados
-        if (arg is list[Estado]):
+        if arg is list[Estado]:
             self.estados = arg
         # Se o argumento for uma gramática
         else:
-            self.estados = self.__carregarGramatica(arg[0])
+            self.estados = self.__carregar_gramatica(arg[0])
 
-    # Chamado implicitamente no print
+    # Chamado implicitamente no impressao
     def __str__(self):
         # Busca os terminais de todos os estados
         terminais = set()
         for estado in self.estados:
-            if (estado.getTransicoes()):
+            if estado.get_transicoes():
                 terminais.update(
-                    estado.getTransicoes().keys()
+                    estado.get_transicoes().keys()
                 )
         terminais = sorted(terminais)
 
@@ -30,14 +31,14 @@ class Automato:
         linhas = []
         for estado in self.estados:
             # Insere na primeira célula da linha o não-terminal
-            linha = [estado.getIdentificador()]
+            linha = [estado.get_identificador()]
             linhas.append(linha)
 
             # Insere as transições de cada um dos terminais (se houverem)
             for terminal in terminais:
-                if terminal in estado.getTransicoes():
+                if terminal in estado.get_transicoes():
                     # Insere a transição no formato '[A,B]' na célula
-                    linha.append(estado.getTransicaoPor(terminal))
+                    linha.append(estado.get_transicao_por(terminal))
                 else:
                     linha.append('')
 
@@ -47,42 +48,42 @@ class Automato:
         return str(tabela)
 
     # Adicionar novo estado ao autômato
-    def addEstado(self, estado: Estado):
+    def add_estado(self, estado: Estado):
         self.estados.append(estado)
         return self
 
     # Remover estado do autômato
-    def rmEstado(self, estado: Estado):
+    def remover_estado(self, estado: Estado):
         self.estados.remove(estado)
         return self
 
     # Pegar o estado pelo símbolo (se houver)
-    def getEstado(self, simbolo):
-        if (simbolo in self.estados):
+    def get_estado(self, simbolo):
+        if simbolo in self.estados:
             return self.estados[self.estados.index(simbolo)]
 
     # Pegar o estado inicial
-    def getEstadoInicial(self):
+    def get_estado_inicial(self):
         for estado in self.estados:
-            if estado.isInicial():
+            if estado.is_inicial():
                 return estado
 
-    def getEstadoErro(self):
+    def get_estado_erro(self):
         for estado in self.estados:
-            if estado.isErro():
+            if estado.is_erro():
                 return estado
 
     # Determinizar o Autômato Finito (AFD -> AFND)
     def determinizar(self):
         # Inicializa o novo array de estados apenas com o estado incial
-        estados = [e for e in self.estados if e.isInicial()]
+        estados = [e for e in self.estados if e.is_inicial()]
 
         # Itera sobre o novo array de estados buscando transições não verificadas
         # (desta forma já eliminamos a existência de estados inalcançáveis)
         for estado in estados:
             for terminal in estado.transicoes:
                 # Pega o estado alcançável por um terminal
-                transicao = estado.getTransicaoPor(terminal)
+                transicao = estado.get_transicao_por(terminal)
 
                 # Verifica se já há algum estado com os caracteres
                 if transicao not in estados:
@@ -95,21 +96,21 @@ class Automato:
     def minimizar(self):
         # Inicializando os conjuntos de cada estado
         for estado in self.estados:
-            if estado.ehMorto([]):
-                self.rmEstado(estado)
+            if estado.is_morto([]):
+                self.remover_estado(estado)
 
         for estado in self.estados:
-            for terminal in list(estado.getTransicoes()):
-                if estado.getTransicoes()[terminal] not in self.estados:
-                    del estado.getTransicoes()[terminal]
+            for terminal in list(estado.get_transicoes()):
+                if estado.get_transicoes()[terminal] not in self.estados:
+                    del estado.get_transicoes()[terminal]
 
-    def inserirEstadoErro(self):
+    def inserir_estado_erro(self):
         # Busca os terminais de todos os estados
         terminais = set()
         for estado in self.estados:
-            if (estado.getTransicoes()):
+            if estado.get_transicoes():
                 terminais.update(
-                    estado.getTransicoes().keys()
+                    estado.get_transicoes().keys()
                 )
 
         erro = Estado(
@@ -118,23 +119,24 @@ class Automato:
             True,
             True
         )
-        self.addEstado(erro)
+        self.add_estado(erro)
         for estado in self.estados:
             for terminal in terminais:
-                if not estado.getTransicaoPor(terminal):
-                    estado.addTransicao(terminal, erro)
+                if not estado.get_transicao_por(terminal):
+                    estado.add_transicao(terminal, erro)
 
     # Transforma uma gramática em um array de estados
-    def __carregarGramatica(self, gramatica: Gramatica) -> list[Estado]:
+    @staticmethod
+    def __carregar_gramatica(gramatica: Gramatica) -> list[Estado]:
 
         # Função auxiliar para gerar tabela não terminais
-        geradorNaoTerminal = (
+        gerador_nao_terminal = (
             SimboloNaoTerminal(chr(i)) for i in range(ord('A'), ord('Z'))
         )
 
         # Inicializa o conjunto de estados apenas com o inicial
         inicial = Estado(
-            {s for s in gramatica.getSimbolos() if s.getCaracter() == 'S'},
+            {s for s in gramatica.get_simbolos() if s.get_caracter() == 'S'},
             True
         )
 
@@ -146,64 +148,64 @@ class Automato:
 
         # Itera sobre os símbolos da gramática e transforma-os em estados
         for estado in verificar:
-            for simbolo in estado.getNaoTerminais():
-                for regra in simbolo.getProducao().getRegras():
-                    estado.setFinal(estado.isFinal() or regra.isFinal())
+            for simbolo in estado.get_nao_terminais():
+                for regra in simbolo.get_producao().get_regras():
+                    estado.set_final(estado.is_final() or regra.is_final())
 
                     # Cria transições para cada regra não-terminal da gramática
-                    if not regra.isFinal():
+                    if not regra.is_final():
                         # Filtra os não-terminais da regra
-                        naoTerminais = regra.getSimbolosNaoTerminais()
+                        nao_terminais = regra.get_simbolos_nao_terminais()
 
                         # Caso em que a regra é composta por apenas símbolos terminais
                         # deve ser levado a uma nova regra (final)
-                        while not naoTerminais:
-                            novoNaoTerminal = next(geradorNaoTerminal)
-                            if novoNaoTerminal not in gramatica.getSimbolos():
-                                gramatica.addSimbolo(novoNaoTerminal)
-                                naoTerminais = {novoNaoTerminal}
+                        while not nao_terminais:
+                            novo_nao_terminal = next(gerador_nao_terminal)
+                            if novo_nao_terminal not in gramatica.get_simbolos():
+                                gramatica.add_simbolo(novo_nao_terminal)
+                                nao_terminais = {novo_nao_terminal}
 
                         terminais = ''.join(
                             [
-                                s.getCaracter() for s in regra.getSimbolosTerminais()
+                                s.get_caracter() for s in regra.get_simbolos_terminais()
                             ] or 'ε'
                         )
 
-                        novaTransicao = Estado(
-                            naoTerminais,
+                        nova_transicao = Estado(
+                            nao_terminais,
                             False,
-                            regra.isFinal() or not regra.getSimbolosNaoTerminais()
+                            regra.is_final() or not regra.get_simbolos_nao_terminais()
                         )
 
-                        if novaTransicao in verificar:
-                            novaTransicao = verificar[verificar.index(novaTransicao)]
+                        if nova_transicao in verificar:
+                            nova_transicao = verificar[verificar.index(nova_transicao)]
                         else:
-                            verificar.append(novaTransicao)
-                            estados.append(novaTransicao)
+                            verificar.append(nova_transicao)
+                            estados.append(nova_transicao)
 
-                        transicao = estado.getTransicaoPor(terminais)
+                        transicao = estado.get_transicao_por(terminais)
                         if transicao is None:
                             # Adiciona transição ao dicionário (a:Estado(A,B))
-                            estado.addTransicao(
+                            estado.add_transicao(
                                 terminais,
-                                novaTransicao
+                                nova_transicao
                             )
-                        elif transicao != novaTransicao:
+                        elif transicao != nova_transicao:
 
-                            # Criar novo estado com ambas as transições
+                            # Cria estado com ambas as transições
                             composto = Estado(
-                                set(transicao.getNaoTerminais()),
+                                set(transicao.get_nao_terminais()),
                                 False,
-                                regra.isFinal()
+                                regra.is_final()
                             )
-                            composto.addNaoTerminais(regra.getSimbolosNaoTerminais())
+                            composto.add_nao_terminais(regra.get_simbolos_nao_terminais())
 
                             # Verifica se o estado já foi criado e está na fila verificação
                             if composto in verificar:
                                 composto = verificar[verificar.index(composto)]
 
                             # Associar novo estado à transição
-                            estado.getTransicoes()[terminais] = composto
+                            estado.get_transicoes()[terminais] = composto
 
                             if composto not in verificar:
                                 verificar.append(composto)

@@ -1,8 +1,8 @@
 # **LOG REDO**
 
-Univeridade Federal da Fronteira Sul - Campus Chapecó
+Univeridade Federal da Fronteira Sul — Campus Chapecó
 
-Ciência da Computação - Linguagens Formais e Autômatos II – 2022.2
+Ciência da Computação — Linguagens Formais e Autômatos II — 2022.2
 
 Prof. Braulio Mello
 

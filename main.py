@@ -11,32 +11,32 @@ def main():
 
     print('\nRECONHECENDO SENTENÇAS E GRAMÁTICAS...\n')
     linguagem = Linguagem()
-    linguagem.setGramaticas(ler_linguagem('arquivos/linguagem.txt'))
+    linguagem.set_gramaticas(ler_linguagem('arquivos/linguagem.txt'))
     print(linguagem, end="\n\n=============\n\n")
 
     print('\nUNIFICANDO GRAMÁTICAS...\n')
-    linguagem.setGramaticas([linguagem.unificarGramaticas()])
+    linguagem.set_gramaticas([linguagem.unificar_gramaticas()])
     print(linguagem, end="\n\n=============\n\n")
 
     print('\nREMOVENDO EPSILON TRANSIÇÕES...\n')
-    linguagem.setGramaticas(linguagem.rmEpsilonTransicoes())
+    linguagem.set_gramaticas(linguagem.remover_epsilon_transicoes())
     print(linguagem, end="\n\n=============\n\n")
 
     print('\nGERANDO AUTÔMATO FINITO...\n')
-    linguagem.gerarAutomato()
-    print(linguagem.getAutomato(), end="\n\n=============\n\n")
+    linguagem.gerar_automato()
+    print(linguagem.get_automato(), end="\n\n=============\n\n")
 
     print('\nDETERMINIZANDO AUTOMATO FINITO...\n')
-    linguagem.getAutomato().determinizar()
-    print(linguagem.getAutomato(), end="\n\n=============\n\n")
+    linguagem.get_automato().determinizar()
+    print(linguagem.get_automato(), end="\n\n=============\n\n")
 
     print('\nMINIMIZANDO AUTOMATO FINITO...\n')
-    linguagem.getAutomato().minimizar()
-    print(linguagem.getAutomato(), end="\n\n=============\n\n")
+    linguagem.get_automato().minimizar()
+    print(linguagem.get_automato(), end="\n\n=============\n\n")
 
     print('\nINSERINDO ESTADO DE ERRO...\n')
-    linguagem.getAutomato().inserirEstadoErro()
-    print(linguagem.getAutomato(), end="\n\n=============\n\n")
+    linguagem.get_automato().inserir_estado_erro()
+    print(linguagem.get_automato(), end="\n\n=============\n\n")
 
     print('\n\n\n\n')
     print('============================================')

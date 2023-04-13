@@ -17,39 +17,39 @@ def ler_linguagem(path: str):
 
             for linha in arquivo:
 
-                # Remove as quebras de linha da string
+                # Remove as quebras de linha do arquivo
                 linha = re.sub('\n|\r', '', linha).strip()
 
                 # Remove os comentarios das linhas
-                if ('//' in linha):
+                if '//' in linha:
                     linha = linha.split('//')[0]
 
-                # Identifica qual o tipo de leitura (sentença/gramatica/linha em branco/comentario)
-                if ('::=' in linha):
-                    if (modo_gramatica == False):
+                # Identifica qual a forma de leitura (sentença/gramatica/linha em branco/comentario)
+                if '::=' in linha:
+                    if not modo_gramatica:
                         gramatica = Gramatica()
 
                     modo_gramatica = True
 
-                    gramatica.addSimbolo(
-                        decodificarGramatica(
-                            linha, gramatica.getSimbolosNaoTerminais()
+                    gramatica.add_simbolo(
+                        decodificar_gramatica(
+                            linha, gramatica.get_simbolos_nao_terminais()
                         )
                     )
 
-                elif (linha != ''):
-                    gramatica = decodificarSentenca(linha)
+                elif linha != '':
+                    gramatica = decodificar_sentenca(linha)
 
                 else:
                     modo_gramatica = False
 
                 # No caso de estar lendo uma gramática, insere apenas no final
-                if (modo_gramatica == False and gramatica.getSimbolos() != []):
+                if not modo_gramatica and gramatica.get_simbolos() != []:
                     gramaticas.append(gramatica)
                     gramatica = Gramatica([])
 
             # Caso chegue no final do arquivo com uma gramática em aberto
-            if (modo_gramatica == True):
+            if modo_gramatica:
                 gramaticas.append(gramatica)
 
     except Exception as e:
@@ -59,82 +59,83 @@ def ler_linguagem(path: str):
     return gramaticas
 
 
-# Decodifica a string da sentença e retorna elementos
-def decodificarSentenca(sentenca: str):
+# Decodifica o texto da sentença e retorna elementos
+def decodificar_sentenca(sentenca: str):
     # Gera símbolos não terminais em ordem alfabética
-    naoTerminal = (
+    nao_terminal = (
         SimboloNaoTerminal(chr(i)) for i in range(ord('A'), ord('Z'))
     )
 
     # Armazena os símbolos de controle
     atual = SimboloNaoTerminal('S', True)
-    proximo = None
 
     gramatica = Gramatica()
 
     # Gera uma nova gramática para cada símbolo da sentença
     for simbolo in sentenca:
-        proximo = next(naoTerminal)
-        atual.producao.addRegra(Regra([SimboloTerminal(simbolo), proximo]))
-        gramatica.addSimbolo(atual)
+        proximo = next(nao_terminal)
+        atual.producao.add_regra(Regra([SimboloTerminal(simbolo), proximo]))
+        gramatica.add_simbolo(atual)
         atual = proximo
 
     # Insere a produção final na gramática (contendo apenas epsilon)
-    atual.producao.addRegra(Regra([Epsilon()]))
-    gramatica.addSimbolo(atual)
+    atual.producao.add_regra(Regra([Epsilon()]))
+    gramatica.add_simbolo(atual)
 
     return gramatica
 
 
 # Decodifica a string da gramática e retorna elementos
-def decodificarGramatica(strGramatica: str, simbolosDaGramatica: set = set()):
+def decodificar_gramatica(str_gramatica: str, simbolos_da_gramatica=None):
     # Separa o não-terminal das produções
-    [simbolo, regras] = strGramatica.split('::=')
+    if simbolos_da_gramatica is None:
+        simbolos_da_gramatica = set()
+    [simbolo, regras] = str_gramatica.split('::=')
     simbolo = re.search('<(.*?)>', simbolo).group(1)
     simbolo = SimboloNaoTerminal(simbolo, simbolo == 'S')
 
-    for s in simbolosDaGramatica:
-        if (s.getCaracter() == simbolo.getCaracter()):
+    for s in simbolos_da_gramatica:
+        if s.get_caracter() == simbolo.get_caracter():
             simbolo = s
 
-    simbolosDaGramatica.add(simbolo)
+    simbolos_da_gramatica.add(simbolo)
 
     # Identifica as regras das produções
-    for strRegra in regras.split('|'):
-        strRegra = strRegra.strip()
+    for str_regra in regras.split('|'):
+        str_regra = str_regra.strip()
 
         # Identifica os símbolos da regra
         regra = Regra([])
-        while strRegra:
+        while str_regra:
 
-            strSimbolo = strRegra[0]
+            str_simbolo = str_regra[0]
 
             # Identifica símbolo não-terminal
-            if strSimbolo == '<':
-                strRegra = strRegra[1:].split('>', 1)
-                naoTerminal = SimboloNaoTerminal(strRegra[0])
+            if str_simbolo == '<':
+                str_regra = str_regra[1:].split('>', 1)
+                nao_terminal = SimboloNaoTerminal(str_regra[0])
 
-                for s in simbolosDaGramatica:
-                    if (s.getCaracter() == naoTerminal.getCaracter()):
-                        naoTerminal = s
+                for s in simbolos_da_gramatica:
+                    if s.get_caracter() == nao_terminal.get_caracter():
+                        nao_terminal = s
                         break
 
-                simbolosDaGramatica.add(naoTerminal)
-                regra.addSimbolo(naoTerminal)
-                strRegra = strRegra[1]
+                simbolos_da_gramatica.add(nao_terminal)
+                regra.add_simbolo(nao_terminal)
+                str_regra = str_regra[1]
 
             else:
                 # Identifica símbolo épsilon
-                if strSimbolo == 'ε':
-                    regra.addSimbolo(Epsilon())
+                if str_simbolo == 'ε':
+                    regra.add_simbolo(Epsilon())
 
                 # Identifica símbolo terminal
-                elif strSimbolo != ' ':
-                    regra.addSimbolo(SimboloTerminal(strSimbolo))
+                elif str_simbolo != ' ':
+                    regra.add_simbolo(SimboloTerminal(str_simbolo))
 
-                strRegra = strRegra[1:]
+                str_regra = str_regra[1:]
 
-        simbolo.getProducao().addRegra(regra)
+        simbolo.get_producao().add_regra(regra)
 
     return simbolo
 

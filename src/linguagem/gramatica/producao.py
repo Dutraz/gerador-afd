@@ -15,14 +15,14 @@ class Producao:
     def __eq__(self, other):
         return other and str(self) == str(other)
 
-    def addRegra(self, regra: Regra) -> 'Producao':
+    def add_regra(self, regra: Regra) -> 'Producao':
         self.regras.append(regra)
         return self
 
-    def getRegras(self) -> list[Regra]:
+    def get_regras(self) -> list[Regra]:
         return self.regras
 
-    def getSimbolosNaoTerminais(self) -> set:
+    def get_simbolos_nao_terminais(self) -> set:
         return {
-            simbolo for regra in self.regras for simbolo in regra.getSimbolosNaoTerminais()
+            simbolo for regra in self.regras for simbolo in regra.get_simbolos_nao_terminais()
         }

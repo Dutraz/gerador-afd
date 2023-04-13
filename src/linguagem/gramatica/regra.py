@@ -7,7 +7,7 @@ class Regra:
         self.simbolos = simbolos or []
 
     def __str__(self):
-        return ''.join([str(s) for s in self.simbolos])
+        return ''.join([str(simbolo) for simbolo in self.simbolos])
 
     def __hash__(self):
         return hash(str(self))
@@ -15,22 +15,22 @@ class Regra:
     def __eq__(self, other):
         return other and str(self) == str(other)
 
-    def addSimbolo(self, simbolo: 's.Simbolo') -> 'Regra':
+    def add_simbolo(self, simbolo: 's.Simbolo') -> 'Regra':
         self.simbolos.append(simbolo)
         return self
 
-    def getSimbolos(self) -> list['s.Simbolo']:
+    def get_simbolos(self) -> list['s.Simbolo']:
         return self.simbolos
 
-    def getSimbolosNaoTerminais(self) -> list['s.SimboloNaoTerminal']:
+    def get_simbolos_nao_terminais(self) -> set['s.SimboloNaoTerminal']:
         return {
             x for x in self.simbolos if isinstance(x, s.SimboloNaoTerminal)
         }
 
-    def getSimbolosTerminais(self) -> list['s.SimboloTerminal']:
+    def get_simbolos_terminais(self) -> set['s.SimboloTerminal']:
         return {
             x for x in self.simbolos if isinstance(x, s.SimboloTerminal)
         }
 
-    def isFinal(self) -> bool:
+    def is_final(self) -> bool:
         return isinstance(self.simbolos[0], s.Epsilon)

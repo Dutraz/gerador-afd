@@ -1,9 +1,10 @@
 from prettytable import PrettyTable
-from src.reconhecedor.tabela.simbolo import Simbolo
 
 
 class Tabela:
-    def __init__(self, simbolos: list[Simbolo] = []):
+    def __init__(self, simbolos=None):
+        if simbolos is None:
+            simbolos = []
         self.simbolos = simbolos
 
     def __str__(self):

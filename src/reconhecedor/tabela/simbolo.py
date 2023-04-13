@@ -6,7 +6,7 @@ class Simbolo:
         self.estado_final = None
 
     def __str__(self):
-        return f'{self.nome} (linha {self.linha}). {"ERRO!!!" if self.estado_final and self.estado_final.isErro() else ""}'
+        return f'{self.nome} (linha {self.linha}). {self.estado_final}'
 
     def get_linha(self):
         return self.linha
@@ -21,4 +21,4 @@ class Simbolo:
         return self.estado_final
 
     def get_caracter_estado_final(self):
-        return self.estado_final.getCaracteres()
+        return self.estado_final.get_caracteres()

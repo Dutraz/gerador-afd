@@ -9,16 +9,16 @@ class Gramatica:
     def __str__(self):
         return '\n'.join([f'{r}::= {r.producao}' for r in self.simbolos])
 
-    def addSimbolo(self, simbolo: SimboloNaoTerminal) -> 'Gramatica':
+    def add_simbolo(self, simbolo: SimboloNaoTerminal) -> 'Gramatica':
         self.simbolos.append(simbolo)
         return self
 
-    def getSimbolos(self) -> Simbolo:
+    def get_simbolos(self) -> list[Simbolo]:
         return self.simbolos
 
-    def getSimbolosNaoTerminais(self) -> set[Simbolo]:
-        naoTerminais = {
-            simbolo for s in self.simbolos for simbolo in s.getProducao().getSimbolosNaoTerminais()
+    def get_simbolos_nao_terminais(self) -> set[Simbolo]:
+        nao_terminais = {
+            simbolo for s in self.simbolos for simbolo in s.get_producao().get_simbolos_nao_terminais()
         }
-        naoTerminais.update(set([s for s in self.simbolos]))
-        return naoTerminais
+        nao_terminais.update(set([s for s in self.simbolos]))
+        return nao_terminais
