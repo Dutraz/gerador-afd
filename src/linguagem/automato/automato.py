@@ -61,6 +61,17 @@ class Automato:
         if (simbolo in self.estados):
             return self.estados[self.estados.index(simbolo)]
 
+    # Pegar o estado inicial
+    def getEstadoInicial(self):
+        for estado in self.estados:
+            if estado.isInicial():
+                return estado
+
+    def getEstadoErro(self):
+        for estado in self.estados:
+            if estado.isErro():
+                return estado
+
     # Determinizar o Autômato Finito (AFD -> AFND)
     def determinizar(self):
         # Inicializa o novo array de estados apenas com o estado incial
@@ -104,6 +115,7 @@ class Automato:
         erro = Estado(
             {SimboloNaoTerminal('_')},
             False,
+            True,
             True
         )
         self.addEstado(erro)

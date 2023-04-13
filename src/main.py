@@ -3,7 +3,7 @@ import os
 from arquivo_fonte import ler_fonte
 from arquivo_linguagem import ler_linguagem
 from linguagem.linguagem import Linguagem
-from reconhecedor.tabela.tabela import Tabela
+from reconhecedor.lexico import AnalisadorLexico
 
 
 def main():
@@ -38,9 +38,22 @@ def main():
     linguagem.getAutomato().inserirEstadoErro()
     print(linguagem.getAutomato(), end="\n\n=============\n\n")
 
-    print('\nCARREGANDO CÓDIGO FONTE...\n')
-    tabela = Tabela(ler_fonte('../arquivos/fonte.txt'))
-    print(tabela)
+    print('\n\n\n\n')
+    print('============================================')
+    print('======== CARREGANDO CÓDIGO FONTE... ========')
+    print('============================================\n')
+    analisador_lexico = AnalisadorLexico(
+        linguagem,
+        ler_fonte('../arquivos/fonte.txt')
+    )
+
+    print('\nCRIANDO FITA DE LEITURA...\n')
+    print(analisador_lexico.get_fita(), end="\n\n=============\n\n")
+
+    print('\nCRIANDO TABELA DE SÍMBOLOS...\n')
+    print(analisador_lexico.get_tabela(), end="\n\n=============\n\n")
+
+    print(analisador_lexico.get_erros())
 
 
 if __name__ == '__main__':

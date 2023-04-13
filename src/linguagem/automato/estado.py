@@ -3,10 +3,12 @@ from linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal
 
 class Estado:
 
-    def __init__(self, naoTerminais: set[SimboloNaoTerminal] = None, inicial: bool = False, final: bool = False):
+    def __init__(self, naoTerminais: set[SimboloNaoTerminal] = None, inicial: bool = False, final: bool = False,
+                 erro: bool = False):
         self.naoTerminais = naoTerminais or set()
         self.inicial = inicial
         self.final = final
+        self.erro = erro
         self.transicoes = dict()
 
     def __str__(self):
@@ -55,7 +57,7 @@ class Estado:
         self.inicial = inicial
         return self
 
-    def isInicial(self):
+    def isInicial(self) -> bool:
         return self.inicial
 
     def setFinal(self, final: bool = True) -> 'Estado':
@@ -64,6 +66,13 @@ class Estado:
 
     def isFinal(self) -> bool:
         return self.final
+
+    def setErro(self, erro: bool = True) -> 'Estado':
+        self.erro = erro
+        return self
+
+    def isErro(self) -> bool:
+        return self.erro
 
     def ehMorto(self, verificados=[]) -> bool:
         if self.isFinal():
