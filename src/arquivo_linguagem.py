@@ -3,6 +3,7 @@ import re
 from src.linguagem.gramatica.gramatica import Gramatica
 from src.linguagem.gramatica.regra import Regra
 from src.linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
+from src.util import gerador_de_tokens
 
 
 def ler_linguagem(path: str):
@@ -62,9 +63,7 @@ def ler_linguagem(path: str):
 # Decodifica o texto da sentença e retorna elementos
 def decodificar_sentenca(sentenca: str):
     # Gera símbolos não terminais em ordem alfabética
-    nao_terminal = (
-        SimboloNaoTerminal(chr(i)) for i in range(ord('A'), ord('Z'))
-    )
+    gerador_nao_terminal = gerador_de_tokens()
 
     # Armazena os símbolos de controle
     atual = SimboloNaoTerminal('S', True)
@@ -73,7 +72,7 @@ def decodificar_sentenca(sentenca: str):
 
     # Gera uma nova gramática para cada símbolo da sentença
     for simbolo in sentenca:
-        proximo = next(nao_terminal)
+        proximo = SimboloNaoTerminal(next(gerador_nao_terminal))
         atual.producao.add_regra(Regra([SimboloTerminal(simbolo), proximo]))
         gramatica.add_simbolo(atual)
         atual = proximo

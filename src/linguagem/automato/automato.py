@@ -3,6 +3,7 @@ from prettytable import PrettyTable
 from src.linguagem.automato.estado import Estado
 from src.linguagem.gramatica.gramatica import Gramatica
 from src.linguagem.gramatica.simbolo import SimboloNaoTerminal
+from src.util import gerador_de_tokens
 
 
 class Automato:
@@ -126,13 +127,10 @@ class Automato:
                     estado.add_transicao(terminal, erro)
 
     # Transforma uma gramática em um array de estados
-    @staticmethod
-    def __carregar_gramatica(gramatica: Gramatica) -> list[Estado]:
+    def __carregar_gramatica(self, gramatica: Gramatica) -> list[Estado]:
 
         # Função auxiliar para gerar tabela não terminais
-        gerador_nao_terminal = (
-            SimboloNaoTerminal(chr(i)) for i in range(ord('A'), ord('Z'))
-        )
+        gerador_nao_terminal = gerador_de_tokens()
 
         # Inicializa o conjunto de estados apenas com o inicial
         inicial = Estado(
@@ -160,7 +158,7 @@ class Automato:
                         # Caso em que a regra é composta por apenas símbolos terminais
                         # deve ser levado a uma nova regra (final)
                         while not nao_terminais:
-                            novo_nao_terminal = next(gerador_nao_terminal)
+                            novo_nao_terminal = SimboloNaoTerminal(next(gerador_nao_terminal))
                             if novo_nao_terminal not in gramatica.get_simbolos():
                                 gramatica.add_simbolo(novo_nao_terminal)
                                 nao_terminais = {novo_nao_terminal}

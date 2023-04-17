@@ -12,7 +12,7 @@ class Estado:
         self.transicoes = dict()
 
     def __str__(self):
-        return f'[{",".join(sorted([s.get_caracter() for s in self.naoTerminais]))}]'
+        return f'{",".join(sorted([s.get_caracter() for s in self.naoTerminais]))}'
         # DEBUG ONLY
         # return f'[{", ".join(sorted([s.getCaracter() for s in self.naoTerminais]))}]({str(id(self))[-4:]})'
 

@@ -1,6 +1,7 @@
 from src.linguagem.automato.automato import Automato
 from src.linguagem.gramatica.gramatica import Gramatica
 from src.linguagem.gramatica.simbolo import SimboloNaoTerminal, SimboloTerminal, Epsilon
+from src.util import *
 
 
 class Linguagem:
@@ -28,6 +29,10 @@ class Linguagem:
         return self.automato
 
     def unificar_gramaticas(self) -> Gramatica:
+
+        # Instancia o gerador de tokens
+        gerador_nao_terminal = gerador_de_tokens()
+
         # Cria uma gramática inicializada por um novo <S> inicial
         simbolo_inicial = SimboloNaoTerminal('S', True)
         g = Gramatica()
@@ -43,9 +48,7 @@ class Linguagem:
                 else:
                     # Se não é tabela inicial, procura por símbolo ainda não utilizado
                     while simbolo.get_caracter() in [s.get_caracter() for s in g.get_simbolos()]:
-                        simbolo.set_caracter(
-                            chr(ord(simbolo.get_caracter()) + 1)
-                        )
+                        simbolo.set_caracter(next(gerador_nao_terminal))
                     g.add_simbolo(simbolo)
 
                 # Substituindo o S nas regras pelo novo S instanciado

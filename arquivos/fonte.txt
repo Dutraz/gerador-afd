@@ -1,5 +1,7 @@
-se aeiou
-    equanto eiaap
-        oie
-senao
-    oiii
+var aux1 = 5
+
+enquanto aux1 > 0
+    se aux1 == 1
+        imprime "um"
+    senao
+        imprime numero_1
