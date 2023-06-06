@@ -1,7 +1,7 @@
-var aux1 = 5
+var aux1 = 0
 
-enquanto aux1 > 0
+enquanto aux1 < 5
     se aux1 == 1
-        imprime "um"
-    senao
-        imprime numero_1
+        imprime aux1
+    aux1 = aux1 + 1
+

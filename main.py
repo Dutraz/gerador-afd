@@ -4,6 +4,7 @@ from src.arquivo_fonte import ler_fonte
 from src.arquivo_linguagem import ler_linguagem
 from src.linguagem.linguagem import Linguagem
 from src.reconhecedor.lexico import AnalisadorLexico
+from src.reconhecedor.sintatico import AnalisadorSintatico
 
 
 def main():
@@ -52,8 +53,16 @@ def main():
 
     print('\nCRIANDO TABELA DE SÍMBOLOS...\n')
     print(analisador_lexico.get_tabela(), end="\n\n=============\n\n")
-
     print(analisador_lexico.get_erros())
+
+    print('\n\n\n\n')
+    print('============================================')
+    print('====== CARREGANDO TABELA DE ANÁLISE... =====')
+    print('============================================\n')
+    analisador_sintatico = AnalisadorSintatico(
+        linguagem
+    )
+
 
 
 if __name__ == '__main__':

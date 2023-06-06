@@ -44,7 +44,7 @@ class Automato:
                     linha.append('')
 
         # Instancia a tabela e adiciona as linhas
-        tabela = PrettyTable(list(['-', *terminais]))
+        tabela = PrettyTable(list(['', *terminais]))
         tabela.add_rows(sorted(linhas, key=lambda e: e[0]))
         return str(tabela)
 

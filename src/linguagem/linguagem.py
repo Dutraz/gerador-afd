@@ -13,6 +13,9 @@ class Linguagem:
     def __str__(self):
         return '\n\n'.join([str(g) for g in self.gramaticas])
 
+    def get_cfg_string(self):
+        return '\n\n'.join([str(g) for g in self.gramaticas.get_cfg_string()])
+
     def set_gramaticas(self, gramaticas: list[Gramatica]) -> 'Linguagem':
         self.gramaticas = gramaticas
         return self
@@ -20,6 +23,9 @@ class Linguagem:
     def add_gramatica(self, gramatica: Gramatica) -> 'Linguagem':
         self.gramaticas.append(gramatica)
         return self
+
+    def get_gramaticas(self) -> list[Gramatica]:
+        return self.gramaticas
 
     def gerar_automato(self, gramaticas: list[Gramatica] = None) -> 'Linguagem':
         self.automato = Automato(gramaticas or self.gramaticas)
