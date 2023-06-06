@@ -1,6 +1,6 @@
 import re
 
-from src.reconhecedor.tabela.simbolo import Simbolo
+from src.reconhecedor.tabela_simbolos.simbolo import Simbolo
 
 SEPARADOR = ' '
 OPERADORES = ('+', '-', '*', '/', '(', ')', '[', ']', '{', '}', '>=', '<=', '==', '<', '>', ',', ';')

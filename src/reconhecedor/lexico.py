@@ -1,4 +1,4 @@
-from src.reconhecedor.tabela.tabela import Tabela
+from src.reconhecedor.tabela_simbolos.tabela import Tabela
 
 
 class AnalisadorLexico:

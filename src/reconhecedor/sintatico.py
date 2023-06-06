@@ -1,5 +1,5 @@
 from src.reconhecedor.jsmachines import get_lr_table
-from src.reconhecedor.tabela.tabela import Tabela
+from src.reconhecedor.tabela_simbolos.tabela import Tabela
 
 
 class AnalisadorSintatico:
