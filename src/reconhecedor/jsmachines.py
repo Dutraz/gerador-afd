@@ -7,6 +7,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 
+from src.reconhecedor.tabela_analise.estado import Estado
+from src.reconhecedor.tabela_analise.tabela import TabelaAnalise
+
 
 def start_chrome() -> WebDriver:
     # Path to your ChromeDriver executable
@@ -16,8 +19,11 @@ def start_chrome() -> WebDriver:
     # Set up the Selenium driver with CDP enabled
     chrome_options = Options()
 
-    # # Run Chrome in headless mode
-    # chrome_options.add_argument('--headless')
+    # Run Chrome in headless mode
+    chrome_options.add_argument('--headless')
+
+    # Dont print logs
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     # Launch Chrome browser
     driver = webdriver.Chrome(
@@ -73,17 +79,15 @@ def get_lr_table(grammar_str):
         '//*[@id="lrTableView"]'
     ).get_attribute('innerHTML')
 
-    print(translate_table_to_states(table_html))
-
-    time.sleep(200)
-
     # CLOSE CHROME
     close_chrome(chrome)
 
-    return ''
+    return TabelaAnalise(
+        html_para_estados(table_html)
+    )
 
 
-def translate_table_to_states(table_html):
+def html_para_estados(table_html):
     soup = BeautifulSoup(table_html, 'html.parser')
     table = soup.find('table')
     rows = table.find_all('tr')
@@ -99,12 +103,14 @@ def translate_table_to_states(table_html):
     while rows:
         cols = rows[0].find_all('td')
         numero_estado = int(cols[0].text)
-        states.insert(numero_estado, dict())
+        states.insert(numero_estado, Estado())
 
         for index, transicao in enumerate(cols[1:]):
             if transicao.text != '\xa0':
-                nao_terminal = nao_terminais[index]
-                states[numero_estado][nao_terminal] = transicao.text
+                states[numero_estado].set_acao(
+                    nao_terminais[index],
+                    transicao.text
+                )
 
         del rows[0]
 

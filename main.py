@@ -62,7 +62,7 @@ def main():
     analisador_sintatico = AnalisadorSintatico(
         linguagem
     )
-
+    print(analisador_sintatico.get_tabela_analise())
 
 
 if __name__ == '__main__':
