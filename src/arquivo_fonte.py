@@ -20,6 +20,7 @@ def ler_fonte(path: str):
             for linha in arquivo:
 
                 linha = remover_quebra_de_linhas(linha)
+                linha = remover_comentarios(linha)
                 linha = espaca_operadores(linha)
 
                 for token in pegar_tokens(linha):
@@ -41,6 +42,15 @@ def remover_quebra_de_linhas(linha):
     :return string:
     """
     return linha.replace('\n', '').replace('\r', '')
+
+
+def remover_comentarios(linha):
+    """
+    Remove os comentários de linha de um texto
+    :param string linha:
+    :return string:
+    """
+    return linha.split('//')[0]
 
 
 def pegar_tokens(linha):
