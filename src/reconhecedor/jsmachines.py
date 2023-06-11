@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 
+from src.reconhecedor.tabela_analise.acao import Empilhamento, Reducao, Salto
 from src.reconhecedor.tabela_analise.estado import Estado
 from src.reconhecedor.tabela_analise.tabela import TabelaAnalise
 
@@ -106,10 +107,13 @@ def html_para_estados(table_html):
         states.insert(numero_estado, Estado())
 
         for index, transicao in enumerate(cols[1:]):
-            if transicao.text != '\xa0':
+            transicao = transicao.text
+            if transicao != '\xa0':
                 states[numero_estado].set_acao(
                     nao_terminais[index],
-                    transicao.text
+                    Empilhamento(transicao.replace('s', '')) if 's' in transicao else
+                    Reducao(transicao.replace('r', '')) if 'r' in transicao else
+                    Salto(transicao)
                 )
 
         del rows[0]
