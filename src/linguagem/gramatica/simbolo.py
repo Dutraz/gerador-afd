@@ -71,3 +71,6 @@ class SimboloNaoTerminal(Simbolo):
 
     def get_cfg_string(self):
         return f'{self.caracter}'
+
+    def get_tamanho_regras(self) -> list[int]:
+        return self.producao.get_tamanho_regras()

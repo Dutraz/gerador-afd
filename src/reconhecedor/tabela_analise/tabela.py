@@ -10,7 +10,10 @@ class TabelaAnalise:
         self.estados = estados
 
     def __str__(self):
-        simbolos = [*set(s for e in self.estados for s in e.get_acoes().keys())]
+        simbolos = sorted(
+            [*set(s for e in self.estados for s in e.get_acoes().keys())],
+            key=lambda x: (x.isupper(), len(x), x)
+        )
 
         tabela = PrettyTable(
             [''] + simbolos
@@ -27,3 +30,6 @@ class TabelaAnalise:
 
     def get_estados(self):
         return self.estados
+
+    def get_estado(self, estado):
+        return self.estados[estado]

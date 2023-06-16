@@ -40,3 +40,6 @@ class Regra:
             str(simbolo) if isinstance(simbolo, s.SimboloTerminal) else simbolo.get_cfg_string()
             for simbolo in self.simbolos
         ])
+
+    def get_tamanho(self) -> int:
+        return len(''.join([simbolo.get_caracter() for simbolo in self.simbolos]))

@@ -49,7 +49,7 @@ def main():
     )
 
     print('\nCRIANDO FITA DE LEITURA...\n')
-    print(analisador_lexico.get_fita(), end="\n\n=============\n\n")
+    print(analisador_lexico.get_str_fita(), end="\n\n=============\n\n")
 
     print('\nCRIANDO TABELA DE SÍMBOLOS...\n')
     print(analisador_lexico.get_tabela(), end="\n\n=============\n\n")
@@ -60,9 +60,14 @@ def main():
     print('====== CARREGANDO TABELA DE ANÁLISE... =====')
     print('============================================\n')
     analisador_sintatico = AnalisadorSintatico(
-        linguagem
+        linguagem,
+        analisador_lexico.get_fita()
     )
     print(analisador_sintatico.get_tabela_analise())
+
+    print('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n')
+    analisador_sintatico.verificar()
+
 
 
 if __name__ == '__main__':

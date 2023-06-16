@@ -11,8 +11,11 @@ class AnalisadorLexico:
     def get_tabela(self):
         return self.tabela
 
-    def get_fita(self):
+    def get_str_fita(self):
         return ' '.join([f'[{s.get_caracter_estado_final()}]' for s in self.tabela.simbolos]) + ' $'
+
+    def get_fita(self):
+        return self.tabela.simbolos
 
     def get_erros(self):
         erros = ''
