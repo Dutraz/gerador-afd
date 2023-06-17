@@ -1,7 +1,8 @@
-var aux1 = 0
+var aux1 = 0;
 
-enquanto aux1 < 5
-    se aux1 == 1
-        imprime aux1
-    aux1 = aux1 + 1
-
+enquanto (aux1 < 5) {
+    se (aux1 == 1) {
+        imprime(aux1);
+    }
+    aux1 = aux1 + 1;
+}

@@ -4,10 +4,10 @@ from src.reconhecedor.tabela_analise.acao import Empilhamento, Reducao, Salto
 
 class AnalisadorSintatico:
 
-    def __init__(self, linguagem, fita):
+    def __init__(self, linguagem, estruturas, fita):
         self.linguagem = linguagem
         self.tabela_analise = get_lr_table(
-            linguagem.get_gramaticas()[0].get_cfg_string()
+            estruturas
         )
         self.fita = fita
 

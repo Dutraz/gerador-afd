@@ -1,0 +1,16 @@
+<S> ::= (<S>) | <F> | <G> | <H> | <I> | <J> | ε
+
+<A> ::= variavel                                // VARIÁVEIS
+<B> ::= inteiro                                 // INTEIROS
+<C> ::= + | - | * | /                           // OPERADORES
+
+<D> ::= <A> | <B> | <A><C><D> | <B><C><D>       // EXPRESSÃO
+<E> ::= <D> == <D>                              // CONDIÇÃO
+
+<F> ::= var <A> = <D>;                          // DECLARAÇÃO
+<G> ::= <A> = <D>;                              // ATRIBUIÇÃO
+
+<H> ::= <I>(<E>) {<S>}                          // BLOCO CONDICIONAL
+<I> ::= se | enquanto                           // ESTRUTURA CONDICIONAL
+
+<J> ::= imprime (<D>) ;                         // FUNÇÃO

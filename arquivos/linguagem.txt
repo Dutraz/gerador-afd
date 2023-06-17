@@ -11,6 +11,11 @@ imprime
 -
 *
 /
+(
+)
+{
+}
+;
 
 // Variáveis
 <S> ::= a<A>
