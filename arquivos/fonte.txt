@@ -1,6 +1,6 @@
 var aux1 = 0;
 
-enquanto (aux1 < 5) {
+enquanto (aux1 != 5) {
     se (aux1 == 1) {
         imprime(aux1);
     }

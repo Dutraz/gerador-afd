@@ -5,7 +5,7 @@
 <C> ::= + | - | * | /                           // OPERADORES
 
 <D> ::= <A> | <B> | <A><C><D> | <B><C><D>       // EXPRESSÃO
-<E> ::= <D> == <D>                              // CONDIÇÃO
+<E> ::= <D> == <D> | <D> != <D>                 // CONDIÇÃO
 
 <F> ::= var <A> = <D>;                          // DECLARAÇÃO
 <G> ::= <A> = <D>;                              // ATRIBUIÇÃO

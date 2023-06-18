@@ -4,12 +4,13 @@ from src.linguagem.gramatica.simbolo import SimboloNaoTerminal
 class Estado:
 
     def __init__(self, nao_terminais: set[SimboloNaoTerminal] = None, inicial: bool = False, final: bool = False,
-                 erro: bool = False):
+                 erro: bool = False, token_reconhecido: str = None):
         self.naoTerminais = nao_terminais or set()
         self.inicial = inicial
         self.final = final
         self.erro = erro
         self.transicoes = dict()
+        self.token_reconhecido = token_reconhecido
 
     def __str__(self):
         return f'{",".join(sorted([s.get_caracter() for s in self.naoTerminais]))}'
@@ -89,3 +90,10 @@ class Estado:
                 return False
 
         return True
+
+    def set_token_reconhecido(self, token_reconhecido: str):
+        self.token_reconhecido = token_reconhecido
+        return self
+
+    def get_token_reconhecido(self):
+        return self.token_reconhecido

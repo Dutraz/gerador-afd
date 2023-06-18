@@ -78,7 +78,9 @@ def decodificar_sentenca(sentenca: str):
         atual = proximo
 
     # Insere a produção final na gramática (contendo apenas epsilon)
-    atual.producao.add_regra(Regra([Epsilon()]))
+    atual.producao.add_regra(
+        Regra([Epsilon()], sentenca)
+    )
     gramatica.add_simbolo(atual)
 
     return gramatica

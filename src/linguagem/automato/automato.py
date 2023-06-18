@@ -32,7 +32,10 @@ class Automato:
         linhas = []
         for estado in self.estados:
             # Insere na primeira célula da linha o não-terminal
-            linha = [estado.get_identificador()]
+            # linha = [estado.get_identificador()]
+            # DEBUG ONLY
+            linha = [(estado.get_identificador() + (
+                f' ({estado.get_token_reconhecido()})' if estado.get_token_reconhecido() else ''))]
             linhas.append(linha)
 
             # Insere as transições de cada um dos terminais (se houverem)
@@ -126,6 +129,14 @@ class Automato:
                 if not estado.get_transicao_por(terminal):
                     estado.add_transicao(terminal, erro)
 
+    def get_estados_reconhecedores(self) -> dict:
+        reconhecedoras = {}
+        for e in self.estados:
+            print(e, e.is_final(), e.get_token_reconhecido())
+            if e.is_final():
+                reconhecedoras[e.get_token_reconhecido()] = e
+        return reconhecedoras
+
     # Transforma uma gramática em um array de estados
     def __carregar_gramatica(self, gramatica: Gramatica) -> list[Estado]:
 
@@ -207,5 +218,7 @@ class Automato:
 
                             if composto not in verificar:
                                 verificar.append(composto)
+                    else:
+                        estado.set_token_reconhecido(regra.get_token_reconhecido())
 
         return estados

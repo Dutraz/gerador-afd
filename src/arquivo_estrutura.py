@@ -19,7 +19,7 @@ def ler_estruturas(path: str):
     gramatica_formatada = 'S\' -> S\n'
     for nao_terminal, producoes in gramatica.items():
         for producao in producoes:
-            gramatica_formatada += f"{nao_terminal} -> {producao}\n"
+            gramatica_formatada += f"{nao_terminal} -> {producao} \n"
 
     return gramatica_formatada
 

@@ -3,8 +3,9 @@ import src.linguagem.gramatica.simbolo as s
 
 class Regra:
 
-    def __init__(self, simbolos: list = None):
+    def __init__(self, simbolos: list = None, token_reconhecido: str = None):
         self.simbolos = simbolos or []
+        self.token_reconhecido = token_reconhecido
 
     def __str__(self):
         return ''.join([str(simbolo) for simbolo in self.simbolos])
@@ -43,3 +44,6 @@ class Regra:
 
     def get_tamanho(self) -> int:
         return len(''.join([simbolo.get_caracter() for simbolo in self.simbolos]))
+
+    def get_token_reconhecido(self) -> str:
+        return self.token_reconhecido

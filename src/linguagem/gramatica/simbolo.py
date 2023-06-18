@@ -74,3 +74,6 @@ class SimboloNaoTerminal(Simbolo):
 
     def get_tamanho_regras(self) -> list[int]:
         return self.producao.get_tamanho_regras()
+
+    def get_regras_finais(self) -> list:
+        return self.producao.get_regras_finais()
