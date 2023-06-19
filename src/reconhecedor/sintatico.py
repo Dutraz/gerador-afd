@@ -1,3 +1,4 @@
+from src.reconhecedor.jsmachines import get_lr_table
 from src.reconhecedor.tabela_analise.acao import Empilhamento, Reducao, Salto
 
 
@@ -5,18 +6,15 @@ class AnalisadorSintatico:
 
     def __init__(self, linguagem, estruturas: str, fita):
         self.linguagem = linguagem
-        print(self.substituir_estados_estruturas(estruturas))
-        # self.tabela_analise = get_lr_table(
-        #     estruturas
-        # )
+        self.tabela_analise = get_lr_table(
+            self.substituir_estados_estruturas(estruturas)
+        )
         self.fita = fita
 
     def substituir_estados_estruturas(self, estruturas):
-        for token, simbolo in self.linguagem.get_regras_reconhecedoras().items():
+        for token, simbolo in self.linguagem.automato.get_estados_reconhecedores().items():
             if token:
-                print(f'substuir {token} por {str(simbolo)}')
-                estruturas = estruturas.replace(f' {token} ', ' {{' + simbolo.get_caracter() + '}} ')
-                print(estruturas)
+                estruturas = estruturas.replace(f' {token} ', ' %' + simbolo.get_caracteres() + '% ')
         return estruturas
 
     def get_tabela_analise(self):

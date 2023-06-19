@@ -1,7 +1,7 @@
 <S> ::= (<S>) | <F> | <G> | <H> | <I> | <J> | ε
 
-<A> ::= variavel                                // VARIÁVEIS
-<B> ::= inteiro                                 // INTEIROS
+<A> ::= var_id                                  // VARIÁVEIS
+<B> ::= int_num                                 // INTEIROS
 <C> ::= + | - | * | /                           // OPERADORES
 
 <D> ::= <A> | <B> | <A><C><D> | <B><C><D>       // EXPRESSÃO

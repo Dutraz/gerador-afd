@@ -32,10 +32,10 @@ class Automato:
         linhas = []
         for estado in self.estados:
             # Insere na primeira célula da linha o não-terminal
-            # linha = [estado.get_identificador()]
+            linha = [estado.get_identificador()]
             # DEBUG ONLY
-            linha = [(estado.get_identificador() + (
-                f' ({estado.get_token_reconhecido()})' if estado.get_token_reconhecido() else ''))]
+            # linha = [(estado.get_identificador() + (
+            #     f' ({estado.get_token_reconhecido()})' if estado.get_token_reconhecido() else ''))]
             linhas.append(linha)
 
             # Insere as transições de cada um dos terminais (se houverem)
@@ -132,7 +132,6 @@ class Automato:
     def get_estados_reconhecedores(self) -> dict:
         reconhecedoras = {}
         for e in self.estados:
-            print(e, e.is_final(), e.get_token_reconhecido())
             if e.is_final():
                 reconhecedoras[e.get_token_reconhecido()] = e
         return reconhecedoras

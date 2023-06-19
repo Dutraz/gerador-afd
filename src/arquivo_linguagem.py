@@ -103,10 +103,18 @@ def decodificar_gramatica(str_gramatica: str, simbolos_da_gramatica=None):
 
     # Identifica as regras das produções
     for str_regra in regras.split('|'):
+
+        reconhecedor = None
+
+        # Se a regra reconhece algum token
+        if '%' in str_regra:
+            str_regra, reconhecedor = str_regra.split('%', 1)
+            reconhecedor = reconhecedor.split('%')[0].strip()
+
         str_regra = str_regra.strip()
 
         # Identifica os símbolos da regra
-        regra = Regra([])
+        regra = Regra([], reconhecedor)
         while str_regra:
 
             str_simbolo = str_regra[0]

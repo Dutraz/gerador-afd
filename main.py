@@ -1,9 +1,11 @@
 import os
 
+from src.arquivo_estrutura import ler_estruturas
 from src.arquivo_fonte import ler_fonte
 from src.arquivo_linguagem import ler_linguagem
 from src.linguagem.linguagem import Linguagem
 from src.reconhecedor.lexico import AnalisadorLexico
+from src.reconhecedor.sintatico import AnalisadorSintatico
 
 
 def main():
@@ -58,13 +60,12 @@ def main():
     print('============================================')
     print('====== CARREGANDO TABELA DE ANÁLISE... =====')
     print('============================================\n')
-    print(*[f'{k} -> {v}' for k, v in linguagem.automato.get_estados_reconhecedores().items()], sep='\n')
-    # analisador_sintatico = AnalisadorSintatico(
-    #     linguagem,
-    #     ler_estruturas('arquivos/estruturas.txt'),
-    #     analisador_lexico.get_fita()
-    # )
-    # print(analisador_sintatico.get_tabela_analise())
+    analisador_sintatico = AnalisadorSintatico(
+        linguagem,
+        ler_estruturas('arquivos/estruturas.txt'),
+        analisador_lexico.get_fita()
+    )
+    print(analisador_sintatico.get_tabela_analise())
 
     # print('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n')
     # analisador_sintatico.verificar()

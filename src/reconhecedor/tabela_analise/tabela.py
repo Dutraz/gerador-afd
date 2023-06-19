@@ -12,7 +12,7 @@ class TabelaAnalise:
     def __str__(self):
         simbolos = sorted(
             [*set(s for e in self.estados for s in e.get_acoes().keys())],
-            key=lambda x: (x.isupper(), len(x), x)
+            key=lambda x: ((x.index('%') if '%' in x else 100), x.isupper(), len(x), x)
         )
 
         tabela = PrettyTable(
