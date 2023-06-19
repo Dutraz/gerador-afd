@@ -1,3 +1,4 @@
+import pickle
 import time
 
 from bs4 import BeautifulSoup
@@ -12,61 +13,84 @@ from src.reconhecedor.tabela_analise.estado import Estado
 from src.reconhecedor.tabela_analise.tabela import TabelaAnalise
 
 
-def start_chrome() -> WebDriver:
-    # Path to your ChromeDriver executable
-    webdriver_service = Service(r'C:\chromedriver\chromedriver.exe')
-    webdriver_service.start()
+def iniciar_chrome() -> WebDriver:
+    # Caminho para o executável do ChromeDriver
+    servico = Service(r'C:\chromedriver\chromedriver.exe')
+    servico.start()
 
-    # Set up the Selenium driver with CDP enabled
-    chrome_options = Options()
+    # Inicia o chrome em background
+    opcoes = Options()
+    opcoes.add_argument('--headless')
 
-    # Run Chrome in headless mode
-    chrome_options.add_argument('--headless')
+    # Não imprime logs
+    opcoes.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-    # Dont print logs
-    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-
-    # Launch Chrome browser
+    # Abre o chrome
     driver = webdriver.Chrome(
-        service=webdriver_service,
-        options=chrome_options
+        service=servico,
+        options=opcoes
     )
 
     return driver
 
 
-def close_chrome(driver: WebDriver):
-    # Close the browser
+def fechar_chrome(driver: WebDriver):
+    # Fecha o navegador
     driver.quit()
 
 
-def open_url(driver: WebDriver, url: str):
-    # Open the specified URL
+def abrir_url(driver: WebDriver, url: str):
+    # Abre a url especificada
     driver.get(url)
 
 
-def get_lr_table(grammar_str):
-    # OPEN CHROME
-    chrome = start_chrome()
+def get_tabela_lr(gramatica_str, recarregar):
+    # Se for necessário recarregar a tabela lr, raspa a página jsmachines
+    if recarregar:
+        tabela_lr = raspar_tabela_lr(gramatica_str)
 
-    # OPEN JS MACHINEScd
-    open_url(chrome, 'https://jsmachines.sourceforge.net/machines/slr.html')
+        # Salva o arquivo a tabela em um pickle em cache
+        salvar_cache_tabela_lr('arquivos/cache/estruturas.pkl', tabela_lr)
 
-    # GET THE GRAMMAR FIELD
-    grammar_field = chrome.find_element(
+        return tabela_lr
+
+    # Se não, pega do arquivo pickle em cache
+    return get_cache_tabela_lr('arquivos/cache/estruturas.pkl')
+
+
+def salvar_cache_tabela_lr(path: str, tabela):
+    with open(path, 'wb') as file:
+        pickle.dump(tabela, file)
+
+
+def get_cache_tabela_lr(path: str):
+    with open(path, 'rb') as file:
+        tabela = pickle.load(file)
+    return tabela
+
+
+def raspar_tabela_lr(gramatica_str) -> TabelaAnalise:
+    # ABRIR CHROME
+    chrome = iniciar_chrome()
+
+    # ABRIR JS MACHINES
+    abrir_url(chrome, 'https://jsmachines.sourceforge.net/machines/slr.html')
+
+    # PEGA O CAMPO DAS GRAMÁTICAS
+    campo_gramatica = chrome.find_element(
         By.ID,
         'grammar'
     )
 
-    # CLEAR FIELD
-    chrome.execute_script("arguments[0].value = ''", grammar_field)
+    # LIMPA O CAMPO
+    chrome.execute_script("arguments[0].value = ''", campo_gramatica)
 
-    # INSERT GRAMMAR
-    grammar_field.send_keys(grammar_str)
+    # INSERE A GRAMÁTICA
+    campo_gramatica.send_keys(gramatica_str)
 
     time.sleep(1)
 
-    # CLICK ON THE BUTTON
+    # CLICA NO BOTÃO PARA GERAR A TABELA
     chrome.find_element(
         By.XPATH,
         '//input[@type="button"][@value=">>"]'
@@ -74,42 +98,42 @@ def get_lr_table(grammar_str):
 
     time.sleep(2)
 
-    # GET THE RESULT TABLE
-    table_html = chrome.find_element(
+    # PEGA O HTML DA TABELA GERADA
+    html_tabela = chrome.find_element(
         By.XPATH,
         '//*[@id="lrTableView"]'
     ).get_attribute('innerHTML')
 
-    # CLOSE CHROME
-    close_chrome(chrome)
+    # FECHA O CHROME
+    fechar_chrome(chrome)
 
     return TabelaAnalise(
-        html_para_estados(table_html)
+        html_para_estados(html_tabela)
     )
 
 
-def html_para_estados(table_html):
-    soup = BeautifulSoup(table_html, 'html.parser')
-    table = soup.find('table')
-    rows = table.find_all('tr')
+def html_para_estados(html_tabela):
+    soup = BeautifulSoup(html_tabela, 'html.parser')
+    tabela = soup.find('table')
+    linhas = tabela.find_all('tr')
 
     # Pega os símbolos não terminais do cabeçalho
-    nao_terminais = [s.text for s in rows[2].find_all('th')]
+    nao_terminais = [s.text for s in linhas[2].find_all('th')]
 
     # Remove a última linha de cabeçalho
-    del rows[:3]
+    del linhas[:3]
 
-    states = []
+    estados = []
 
-    while rows:
-        cols = rows[0].find_all('td')
+    while linhas:
+        cols = linhas[0].find_all('td')
         numero_estado = int(cols[0].text)
-        states.insert(numero_estado, Estado())
+        estados.insert(numero_estado, Estado())
 
         for index, transicao in enumerate(cols[1:]):
             transicao = transicao.text
             if transicao != '\xa0':
-                states[numero_estado].set_acao(
+                estados[numero_estado].set_acao(
                     nao_terminais[index],
                     Aceite() if 'acc' in transicao else
                     Empilhamento(transicao.replace('s', '')) if 's' in transicao else
@@ -117,6 +141,6 @@ def html_para_estados(table_html):
                     Salto(transicao)
                 )
 
-        del rows[0]
+        del linhas[0]
 
-    return states
+    return estados

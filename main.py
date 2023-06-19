@@ -1,6 +1,6 @@
 import os
 
-from src.arquivo_estrutura import ler_estruturas
+from src.arquivo_estrutura import ler_estruturas, verifica_alteracao
 from src.arquivo_fonte import ler_fonte
 from src.arquivo_linguagem import ler_linguagem
 from src.linguagem.linguagem import Linguagem
@@ -63,7 +63,8 @@ def main():
     analisador_sintatico = AnalisadorSintatico(
         linguagem,
         ler_estruturas('arquivos/estruturas.txt'),
-        analisador_lexico.get_fita()
+        analisador_lexico.get_fita(),
+        verifica_alteracao('arquivos/estruturas.txt'),
     )
     print(analisador_sintatico.get_tabela_analise())
 

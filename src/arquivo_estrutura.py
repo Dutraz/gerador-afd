@@ -1,4 +1,19 @@
+import filecmp
+import os
 import re
+import shutil
+
+
+def verifica_alteracao(path):
+    # Se o arquivo de estruturas em cache já existe e foi alterado
+    alterou = not (
+            os.path.isfile('arquivos/cache/estruturas.txt') and filecmp.cmp(path, 'arquivos/cache/estruturas.txt')
+    )
+
+    # Agora que já verificou alteração, copia o arquivo para a cache
+    shutil.copyfile(path, 'arquivos/cache/estruturas.txt')
+
+    return alterou
 
 
 def ler_estruturas(path: str):

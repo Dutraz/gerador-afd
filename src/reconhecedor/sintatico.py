@@ -1,13 +1,14 @@
-from src.reconhecedor.jsmachines import get_lr_table
+from src.reconhecedor.jsmachines import get_tabela_lr
 from src.reconhecedor.tabela_analise.acao import Empilhamento, Reducao, Salto
 
 
 class AnalisadorSintatico:
 
-    def __init__(self, linguagem, estruturas: str, fita):
+    def __init__(self, linguagem, estruturas: str, fita, recarregar_sintatico: bool):
         self.linguagem = linguagem
-        self.tabela_analise = get_lr_table(
-            self.substituir_estados_estruturas(estruturas)
+        self.tabela_analise = get_tabela_lr(
+            self.substituir_estados_estruturas(estruturas),
+            recarregar_sintatico,
         )
         self.fita = fita
 
