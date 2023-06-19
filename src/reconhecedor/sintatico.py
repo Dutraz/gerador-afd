@@ -35,53 +35,51 @@ class AnalisadorSintatico:
         print(tamanho_regras)
 
         index_fita = 0
-        subindex_fita = 0
 
         # Reconhecimento por pilha vazia
         while pilha:
-            token = fita[index_fita].get_nome() + '$'
-            while token:
-                # Pega o valor do topo da pilha
-                num_estado = int(pilha[-1])
+            # Pega o estado do início da fita
+            token = fita[index_fita]
 
-                # Pega a ação com base no número do estado do topo da pilha
-                acao = tabela.get_estado(
-                    num_estado
-                ).get_acao(
-                    token[subindex_fita]
-                )
+            # Pega o estado do topo da pilha
+            num_estado = int(pilha[-1])
 
-                if isinstance(acao, Empilhamento):
-                    pilha.append(token[subindex_fita])
-                    pilha.append(acao.get_estado())
+            # Pega a ação com base no número do estado do topo da pilha
+            acao = tabela.get_estado(
+                num_estado
+            ).get_acao(
+                f'%{token.get_estado_final()}%'
+            )
 
-                    if subindex_fita < len(token) - 1:
-                        subindex_fita += 1
-                    else:
-                        index_fita += 1
-                        subindex_fita = 0
+            if isinstance(acao, Empilhamento):
+                pilha.append(token)
+                pilha.append(acao.get_estado())
+                index_fita += 1
 
-                if isinstance(acao, Reducao):
-                    pilha.pop(tamanho_regras[acao.get_estado()] * 2)
-                    print('agora fufu')
-                    exit()
-                    pilha.append(token[subindex_fita])
+            elif isinstance(acao, Reducao):
+                # pilha.pop(tamanho_regras[acao.get_estado()] * 2)
+                print('agora fufu')
+                exit()
+                pilha.append(token)
 
-                if isinstance(acao, Salto):
-                    print('agora fufufufu')
-                    exit()
-                    pilha.append(token[subindex_fita])
-                    pilha.append(acao.get_estado())
+            elif isinstance(acao, Salto):
+                print('agora fufufufu')
+                exit()
+                pilha.append(token)
+                pilha.append(acao.get_estado())
 
-                """
-                ======= ONLY PRINT =======
-                """
-                print(
-                    '$',
-                    ' '.join([str(c) for c in pilha]),
-                    ''.join(
-                        [' ' for _ in range(20 - len(' '.join([str(c) for c in pilha])) + subindex_fita + index_fita)]),
-                    ''.join(fita[index_fita].get_nome()[subindex_fita:]),
-                    ' '.join([f.get_nome() for f in fita[index_fita + 1:]]),
-                )
-                # exit()
+            else:
+                print('aqui deu ruim')
+                exit()
+
+            """
+            ======= ONLY PRINT =======
+            """
+            print(
+                '$',
+                ' '.join([str(c) for c in pilha]),
+                ''.join([' ' for _ in range(10 - len(' '.join([str(c) for c in pilha])) + index_fita)]),
+                ' '.join([str(f) for f in fita[index_fita:]]),
+                '$'
+            )
+            # exit()

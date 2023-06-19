@@ -67,8 +67,8 @@ def main():
     )
     print(analisador_sintatico.get_tabela_analise())
 
-    # print('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n')
-    # analisador_sintatico.verificar()
+    print('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n')
+    analisador_sintatico.verificar()
 
 
 if __name__ == '__main__':

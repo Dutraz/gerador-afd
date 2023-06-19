@@ -6,7 +6,9 @@ class Simbolo:
         self.estado_final = None
 
     def __str__(self):
-        return f'{self.nome} (linha {self.linha}). {self.estado_final}'
+        return f'[{self.estado_final}]'
+        # DEBUG ONLY
+        # return f'{self.nome} (linha {self.linha}). {self.estado_final}'
 
     def get_linha(self):
         return self.linha
