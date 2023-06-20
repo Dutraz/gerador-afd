@@ -58,17 +58,27 @@ def main():
 
     print('\n\n\n\n')
     print('============================================')
-    print('====== CARREGANDO TABELA DE ANÁLISE... =====')
+    print('==== CARREGANDO ESTRUTURAS SINTÁTICAS... ===')
     print('============================================\n')
+    estruturas = ler_estruturas('arquivos/estruturas.txt')
+
+    print('\nTRADUZINDO O ARQUIVO DE ESTRUTURAS...\n')
+    print('\n'.join([f'{e["simbolo"]} -> {e["producao"]}' for e in estruturas]), end="\n\n=============\n\n")
+
+    print('\nCARREGANDO TABELA DE ANÁLISE...\n')
     analisador_sintatico = AnalisadorSintatico(
         linguagem,
-        ler_estruturas('arquivos/estruturas.txt'),
+        estruturas,
         analisador_lexico.get_fita(),
         verifica_alteracao('arquivos/estruturas.txt'),
     )
-    print(analisador_sintatico.get_tabela_analise())
+    print(analisador_sintatico.get_tabela_analise(), end="\n\n=============\n\n")
 
-    print('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n')
+    print('\nSUBSTITUINDO TOKENS POR ESTADOS...\n')
+    analisador_sintatico.substituir_por_estados()
+    print(analisador_sintatico.get_tabela_analise(), end="\n\n=============\n\n")
+
+    print('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n', end="\n\n=============\n\n")
     analisador_sintatico.verificar()
 
 

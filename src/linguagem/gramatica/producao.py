@@ -27,8 +27,5 @@ class Producao:
             simbolo for regra in self.regras for simbolo in regra.get_simbolos_nao_terminais()
         }
 
-    def get_tamanho_regras(self) -> list[int]:
-        return [r.get_tamanho() for r in self.regras]
-
     def get_regras_finais(self) -> list:
         return [r for r in self.regras if r.is_final()]

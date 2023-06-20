@@ -31,12 +31,20 @@ def ler_estruturas(path: str):
                 ]
                 gramatica[nao_terminal] = producoes
 
-    gramatica_formatada = 'S\' -> S\n'
+    gramatica_cfg = [{
+        'simbolo': 'S\'',
+        'producao': 'S',
+        'tamanho': 1,
+    }]
     for nao_terminal, producoes in gramatica.items():
         for producao in producoes:
-            gramatica_formatada += f"{nao_terminal} -> {producao} \n"
+            gramatica_cfg.append({
+                'simbolo': nao_terminal,
+                'producao': producao,
+                'tamanho': len(producao.split())
+            })
 
-    return gramatica_formatada
+    return gramatica_cfg
 
 
 def remove_multiplos_espacos(string):

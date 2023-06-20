@@ -42,8 +42,5 @@ class Regra:
             for simbolo in self.simbolos
         ])
 
-    def get_tamanho(self) -> int:
-        return len(''.join([simbolo.get_caracter() for simbolo in self.simbolos]))
-
     def get_token_reconhecido(self) -> str:
         return self.token_reconhecido

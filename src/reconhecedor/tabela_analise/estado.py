@@ -12,6 +12,10 @@ class Estado:
         self.acoes[simbolo] = acao
         return self
 
+    def rm_acao_por(self, simbolo: str):
+        del self.acoes[simbolo]
+        return self
+
     def get_acao(self, simbolo) -> Acao:
         return self.acoes.get(simbolo)
 
