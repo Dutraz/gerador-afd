@@ -79,7 +79,16 @@ def main():
     print(analisador_sintatico.get_tabela_analise(), end="\n\n=============\n\n")
 
     print('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n', end="\n\n=============\n\n")
-    analisador_sintatico.verificar()
+    verificacao_sintatica = analisador_sintatico.verificar()
+    print('\n\n=============\n\n')
+
+    if verificacao_sintatica['sucesso']:
+        print('Código fonte reconhecido sintaticamente.', end="\n\n=============\n\n")
+    else:
+        print('Erro no reconhecimento sintático.')
+        print(verificacao_sintatica['mensagem'])
+        print(verificacao_sintatica['detalhe'], end="\n\n=============\n\n")
+
 
 
 if __name__ == '__main__':

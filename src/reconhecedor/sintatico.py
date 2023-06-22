@@ -87,20 +87,43 @@ class AnalisadorSintatico:
                 pilha.append(acao.get_estado())
 
             elif isinstance(acao, Salto):
-                print('agora fufufufu')
-                exit()
-                pilha.append(token)
-                pilha.append(acao.get_estado())
+                return {
+                    'sucesso': False,
+                    'mensagem': 'Operação de salto não resolvida.'
+                }
 
             elif isinstance(acao, Aceite):
-                print('aqui deu boa')
-                exit()
+                return {
+                    'sucesso': True
+                }
 
             else:
-                print('aqui deu ruim')
-                exit()
+                return {
+                    'sucesso': False,
+                    'mensagem': f'Erro sintático próximo ao token "{token.get_nome()}" na linha {token.get_linha()}.\n',
+                    'detalhe': self.get_detalhe_erro(fita, token)
+                }
 
             self.imprime_reconhecimento(pilha, fita, index_fita)
+
+    @staticmethod
+    def get_detalhe_erro(fita, token):
+        # Pega todos os tokens da linha do erro
+        linha = [t for t in fita if t.get_linha() == token.get_linha()]
+
+        # Descobre a posição do item na lista
+        pos = linha.index(token)
+
+        # Calcula qual a posição da seta que indica a posição do erro
+        espacamento = len(" ".join([t.get_nome() for t in linha[:pos]]))
+
+        return '\n'.join([
+            '> [...]',
+            '> ',
+            f'> {" ".join([t.get_nome() for t in linha])}',
+            f'> {"".join([" " for _ in range(espacamento + 1)])}^',
+            '> [...]',
+        ])
 
     @staticmethod
     def imprime_reconhecimento(pilha, fita, index_fita):
