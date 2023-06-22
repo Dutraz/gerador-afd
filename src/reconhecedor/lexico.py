@@ -42,5 +42,9 @@ class AnalisadorLexico:
                 if estado_atual.is_erro():
                     break
 
+            # Caso o último estado do token não seja final (token incompleto)
+            if not estado_atual.is_final():
+                estado_atual = estado_erro
+
             token.set_estado_final(estado_atual)
             self.tabela.add_simbolo(token)
