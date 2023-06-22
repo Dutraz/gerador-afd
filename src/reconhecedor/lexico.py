@@ -21,7 +21,7 @@ class AnalisadorLexico:
         erros = ''
         for s in self.tabela.get_simbolos():
             if s.get_estado_final().is_erro():
-                erros += f'*** Erro encontrado na linha {s.get_linha()}, token não reconhecido: "{s.get_nome()}".\n'
+                erros += f'*** Erro léxico encontrado na linha {s.get_linha()}, token não reconhecido: "{s.get_nome()}".\n'
         return erros
 
     def carregar_tokens(self, tokens):

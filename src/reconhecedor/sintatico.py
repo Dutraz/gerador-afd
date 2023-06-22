@@ -1,3 +1,4 @@
+from src.debug import is_debug
 from src.reconhecedor.jsmachines import get_tabela_lr
 from src.reconhecedor.tabela_analise.acao import Empilhamento, Reducao, Salto, Aceite
 
@@ -100,11 +101,12 @@ class AnalisadorSintatico:
             else:
                 return {
                     'sucesso': False,
-                    'mensagem': f'Erro sintático próximo ao token "{token.get_nome()}" na linha {token.get_linha()}.\n',
+                    'mensagem': f'*** Erro sintático encontrado na linha {token.get_linha()}, token não esperado: "{token.get_nome()}".',
                     'detalhe': self.get_detalhe_erro(fita, token)
                 }
 
-            self.imprime_reconhecimento(pilha, fita, index_fita)
+            if is_debug():
+                self.imprime_reconhecimento(pilha, fita, index_fita)
 
     @staticmethod
     def get_detalhe_erro(fita, token):

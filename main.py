@@ -3,6 +3,7 @@ import os
 from src.arquivo_estrutura import ler_estruturas, verifica_alteracao
 from src.arquivo_fonte import ler_fonte
 from src.arquivo_linguagem import ler_linguagem
+from src.debug import debug
 from src.linguagem.linguagem import Linguagem
 from src.reconhecedor.lexico import AnalisadorLexico
 from src.reconhecedor.sintatico import AnalisadorSintatico
@@ -11,85 +12,90 @@ from src.reconhecedor.sintatico import AnalisadorSintatico
 def main():
     os.system('cls')
 
-    print('\nRECONHECENDO SENTENÇAS E GRAMÁTICAS...\n')
+    print('\nPROCESSANDO CÓDIGO FONTE...\n')
+
+    debug('\nRECONHECENDO SENTENÇAS E GRAMÁTICAS...\n')
     linguagem = Linguagem()
     linguagem.set_gramaticas(ler_linguagem('arquivos/linguagem.txt'))
-    print(linguagem, end="\n\n=============\n\n")
+    debug(linguagem, True)
 
-    print('\nUNIFICANDO GRAMÁTICAS...\n')
+    debug('\nUNIFICANDO GRAMÁTICAS...\n')
     linguagem.set_gramaticas([linguagem.unificar_gramaticas()])
-    print(linguagem, end="\n\n=============\n\n")
+    debug(linguagem, True)
 
-    print('\nREMOVENDO EPSILON TRANSIÇÕES...\n')
+    debug('\nREMOVENDO EPSILON TRANSIÇÕES...\n')
     linguagem.set_gramaticas(linguagem.remover_epsilon_transicoes())
-    print(linguagem, end="\n\n=============\n\n")
+    debug(linguagem, True)
 
-    print('\nGERANDO AUTÔMATO FINITO...\n')
+    debug('\nGERANDO AUTÔMATO FINITO...\n')
     linguagem.gerar_automato()
-    print(linguagem.get_automato(), end="\n\n=============\n\n")
+    debug(linguagem.get_automato(), True)
 
-    print('\nDETERMINIZANDO AUTOMATO FINITO...\n')
+    debug('\nDETERMINIZANDO AUTOMATO FINITO...\n')
     linguagem.get_automato().determinizar()
-    print(linguagem.get_automato(), end="\n\n=============\n\n")
+    debug(linguagem.get_automato(), True)
 
-    print('\nMINIMIZANDO AUTOMATO FINITO...\n')
+    debug('\nMINIMIZANDO AUTOMATO FINITO...\n')
     linguagem.get_automato().minimizar()
-    print(linguagem.get_automato(), end="\n\n=============\n\n")
+    debug(linguagem.get_automato(), True)
 
-    print('\nINSERINDO ESTADO DE ERRO...\n')
+    debug('\nINSERINDO ESTADO DE ERRO...\n')
     linguagem.get_automato().inserir_estado_erro()
-    print(linguagem.get_automato(), end="\n\n=============\n\n")
+    debug(linguagem.get_automato(), True)
 
-    print('\n\n\n\n')
-    print('============================================')
-    print('======== CARREGANDO CÓDIGO FONTE... ========')
-    print('============================================\n')
+    debug('\n\n\n\n')
+    debug('============================================')
+    debug('======== CARREGANDO CÓDIGO FONTE... ========')
+    debug('============================================\n')
     analisador_lexico = AnalisadorLexico(
         linguagem,
         ler_fonte('arquivos/fonte.txt')
     )
 
-    print('\nCRIANDO FITA DE LEITURA...\n')
-    print(analisador_lexico.get_str_fita(), end="\n\n=============\n\n")
+    debug('\nCRIANDO FITA DE LEITURA...\n')
+    debug(analisador_lexico.get_str_fita(), True)
 
-    print('\nCRIANDO TABELA DE SÍMBOLOS...\n')
-    print(analisador_lexico.get_tabela(), end="\n\n=============\n\n")
-    print(analisador_lexico.get_erros())
+    debug('\nCRIANDO TABELA DE SÍMBOLOS...\n')
+    debug(analisador_lexico.get_tabela(), True)
+    verifica_lexico = analisador_lexico.get_erros()
+    if verifica_lexico:
+        print(verifica_lexico)
+        exit()
 
-    print('\n\n\n\n')
-    print('============================================')
-    print('==== CARREGANDO ESTRUTURAS SINTÁTICAS... ===')
-    print('============================================\n')
+    debug('\n\n\n\n')
+    debug('============================================')
+    debug('==== CARREGANDO ESTRUTURAS SINTÁTICAS... ===')
+    debug('============================================\n')
     estruturas = ler_estruturas('arquivos/estruturas.txt')
 
-    print('\nTRADUZINDO O ARQUIVO DE ESTRUTURAS...\n')
-    print('\n'.join([f'{e["simbolo"]} -> {e["producao"]}' for e in estruturas]), end="\n\n=============\n\n")
+    debug('\nTRADUZINDO O ARQUIVO DE ESTRUTURAS...\n')
+    debug('\n'.join([f'{e["simbolo"]} -> {e["producao"]}' for e in estruturas]))
 
-    print('\nCARREGANDO TABELA DE ANÁLISE...\n')
+    debug('\nCARREGANDO TABELA DE ANÁLISE...\n')
     analisador_sintatico = AnalisadorSintatico(
         linguagem,
         estruturas,
         analisador_lexico.get_fita(),
         verifica_alteracao('arquivos/estruturas.txt'),
     )
-    print(analisador_sintatico.get_tabela_analise(), end="\n\n=============\n\n")
+    debug(analisador_sintatico.get_tabela_analise(), True)
 
-    print('\nSUBSTITUINDO TOKENS POR ESTADOS...\n')
+    debug('\nSUBSTITUINDO TOKENS POR ESTADOS...\n')
     analisador_sintatico.substituir_por_estados()
-    print(analisador_sintatico.get_tabela_analise(), end="\n\n=============\n\n")
+    debug(analisador_sintatico.get_tabela_analise(), True)
 
-    print('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n', end="\n\n=============\n\n")
+    debug('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n')
     verificacao_sintatica = analisador_sintatico.verificar()
-    print('\n\n=============\n\n')
+    debug('\n\n=============\n\n')
 
     if verificacao_sintatica['sucesso']:
-        print('Código fonte reconhecido sintaticamente.', end="\n\n=============\n\n")
+        debug('Código fonte reconhecido sintaticamente.', True)
     else:
-        print('Erro no reconhecimento sintático.')
-        print(verificacao_sintatica['mensagem'])
-        print(verificacao_sintatica['detalhe'], end="\n\n=============\n\n")
+        print(verificacao_sintatica['mensagem'], end='\n\n')
+        print(verificacao_sintatica['detalhe'], end='\n\n')
+        exit()
 
-
+    print('CÓDIGO RECONHECIDO COM SUCESSO!\n')
 
 if __name__ == '__main__':
     main()
