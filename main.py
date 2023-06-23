@@ -69,7 +69,7 @@ def main():
     estruturas = ler_estruturas('arquivos/estruturas.txt')
 
     debug('\nTRADUZINDO O ARQUIVO DE ESTRUTURAS...\n')
-    debug('\n'.join([f'{e["simbolo"]} -> {e["producao"]}' for e in estruturas]))
+    debug('\n'.join([f'|{i:02d}| {e["simbolo"]} -> {e["producao"]}' for i, e in enumerate(estruturas)]))
 
     debug('\nCARREGANDO TABELA DE ANÁLISE...\n')
     analisador_sintatico = AnalisadorSintatico(
@@ -96,6 +96,7 @@ def main():
         exit()
 
     print('CÓDIGO RECONHECIDO COM SUCESSO!\n')
+
 
 if __name__ == '__main__':
     main()

@@ -37,6 +37,12 @@ class AnalisadorSintatico:
         # Faz uma cópia da fita do objeto
         fita = self.fita
 
+        # Caso o arquivo esteja vazio, retorna
+        if len(fita) == 0:
+            return {
+                'sucesso': True
+            }
+
         # Inicia a pilha apenas com estado inicial
         pilha = [0]
         index_fita = 0
@@ -57,6 +63,9 @@ class AnalisadorSintatico:
 
             # Pega a ação com base no número do estado do topo da pilha
             acao = tabela.get_estado(num_estado).get_acao(terminal)
+
+            if is_debug():
+                self.imprime_reconhecimento(pilha, fita, index_fita, acao)
 
             if isinstance(acao, Empilhamento):
                 pilha.append(token)
@@ -105,8 +114,8 @@ class AnalisadorSintatico:
                     'detalhe': self.get_detalhe_erro(fita, token)
                 }
 
-            if is_debug():
-                self.imprime_reconhecimento(pilha, fita, index_fita)
+        if is_debug():
+            self.imprime_reconhecimento(pilha, fita, index_fita, acao)
 
     @staticmethod
     def get_detalhe_erro(fita, token):
@@ -128,14 +137,14 @@ class AnalisadorSintatico:
         ])
 
     @staticmethod
-    def imprime_reconhecimento(pilha, fita, index_fita):
+    def imprime_reconhecimento(pilha, fita, index_fita, acao):
         escapacamento = 20 - len(
             ' '.join([str(c) for c in pilha])
         ) + len(
             ' '.join([str(f) for f in fita[:index_fita]])
         )
 
-        if index_fita >= len(fita):
+        if index_fita >= len(fita) or index_fita == 0:
             escapacamento = escapacamento - 1
 
         print(
@@ -143,5 +152,6 @@ class AnalisadorSintatico:
             ' '.join([str(c) for c in pilha]),
             ''.join([' ' for _ in range(escapacamento)]),
             ' '.join([str(f) for f in fita[index_fita:]]),
-            '$'
+            '$',
+            f'({acao})'
         )

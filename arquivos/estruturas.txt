@@ -1,4 +1,4 @@
-<S> ::= <F><S> | <F> | <G><S> | <G> | <H><S> | <H> | <I><S> | <I> | <J><S> | <J>
+<S> ::= <F><S> | <F> | <G><S> | <G> | <H><S> | <H> | <J><S> | <J>
 
 <A> ::= var_id                                  // VARIÁVEIS
 <B> ::= int_num                                 // INTEIROS
