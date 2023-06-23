@@ -1,16 +1,57 @@
-<S> ::= <F><S> | <F> | <G><S> | <G> | <H><S> | <H> | <J><S> | <J>
+// CORPO DO CÓDIGO
+<S> ::= <F><S>
+<S> ::= <F>
+<S> ::= <G><S>
+<S> ::= <G>
+<S> ::= <H><S>
+<S> ::= <H>
+<S> ::= <J><S>
+<S> ::= <J>
 
-<A> ::= var_id                                  // VARIÁVEIS
-<B> ::= int_num                                 // INTEIROS
-<C> ::= + | - | * | /                           // OPERADORES
 
-<D> ::= <A> | <B> | <A><C><D> | <B><C><D>       // EXPRESSÃO
-<E> ::= <D> == <D> | <D> != <D>                 // CONDIÇÃO
 
-<F> ::= var <A> = <D>;                          // DECLARAÇÃO
-<G> ::= <A> = <D>;                              // ATRIBUIÇÃO
+// VARIÁVEIS
+<A> ::= var_id
 
-<H> ::= <I>(<E>) {<S>}                          // BLOCO CONDICIONAL
-<I> ::= se | enquanto                           // ESTRUTURA CONDICIONAL
+// INTEIROS
+<B> ::= int_num
 
-<J> ::= imprime (<D>) ;                         // FUNÇÃO
+// OPERADORES
+<C> ::= +
+<C> ::= -
+<C> ::= *
+<C> ::= /
+
+
+
+// EXPRESSÃO
+<D> ::= <A>
+<D> ::= <B>
+<D> ::= <A><C><D>
+<D> ::= <B><C><D>
+
+// CONDIÇÃO
+<E> ::= <D> == <D>
+<E> ::= <D> != <D>
+
+
+
+// DECLARAÇÃO
+<F> ::= var <A> = <D>;
+
+// ATRIBUIÇÃO
+<G> ::= <A> = <D>;
+
+
+
+// BLOCO CONDICIONAL
+<H> ::= <I>(<E>) {<S>}
+
+// ESTRUTURA CONDICIONAL
+<I> ::= se
+<I> ::= enquanto
+
+
+
+// FUNÇÃO
+<J> ::= imprime (<D>) ;

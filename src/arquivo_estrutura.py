@@ -21,27 +21,37 @@ def ler_estruturas(path: str):
 
     with open(path, encoding='utf-8') as arquivo:
         for linha in arquivo:
+
+            # Remove os cometários
             linha = linha.split('//')[0]
+
             if linha.strip():
-                nao_terminal, producoes = linha.strip().split('::=')
+                # Separa o símbolo das produções
+                nao_terminal, producao = linha.strip().split('::=')
+
                 nao_terminal = nao_terminal.strip().replace('<', '').replace('>', '')
-                producoes = [
-                    remove_multiplos_espacos(p.replace('<', ' ').replace('>', ' ').replace('ε', '\'\'').strip())
-                    for p in producoes.split('|')
-                ]
-                gramatica[nao_terminal] = producoes
+                producao = remove_multiplos_espacos(
+                    producao.replace('<', ' ').replace('>', ' ').replace('ε', '\'\'').strip()
+                )
+
+                if nao_terminal not in gramatica:
+                    gramatica[nao_terminal] = []
+
+                gramatica[nao_terminal].append(
+                    producao
+                )
 
     gramatica_cfg = [{
         'simbolo': 'S\'',
         'producao': 'S',
         'tamanho': 1,
     }]
-    for nao_terminal, producoes in gramatica.items():
-        for producao in producoes:
+    for nao_terminal, producao in gramatica.items():
+        for p in producao:
             gramatica_cfg.append({
                 'simbolo': nao_terminal,
-                'producao': producao,
-                'tamanho': len(producao.split())
+                'producao': p,
+                'tamanho': len(p.split())
             })
 
     return gramatica_cfg
