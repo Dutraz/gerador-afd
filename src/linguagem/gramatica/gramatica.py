@@ -23,13 +23,6 @@ class Gramatica:
         nao_terminais.update(set([s for s in self.simbolos]))
         return nao_terminais
 
-    def get_cfg_string(self):
-        return 'S\'-> S\n' + '\n'.join([
-            f'{s.get_cfg_string()}-> {r.get_cfg_string()}'
-            for s in self.simbolos
-            for r in s.producao.get_regras()
-        ])
-
     def get_tamanho_regras(self) -> list[int]:
         tamanho_regras = []
         for s in self.simbolos:

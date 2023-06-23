@@ -27,10 +27,6 @@ class Epsilon(Simbolo):
     def __init__(self):
         super().__init__('ε')
 
-    @staticmethod
-    def get_cfg_string():
-        return "''"
-
 
 class SimboloNaoTerminal(Simbolo):
 
@@ -68,9 +64,6 @@ class SimboloNaoTerminal(Simbolo):
 
     def get_producao(self) -> 'Producao':
         return self.producao
-
-    def get_cfg_string(self):
-        return f'{self.caracter}'
 
     def get_tamanho_regras(self) -> list[int]:
         return self.producao.get_tamanho_regras()

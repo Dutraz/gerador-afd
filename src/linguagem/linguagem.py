@@ -13,9 +13,6 @@ class Linguagem:
     def __str__(self):
         return '\n\n'.join([str(g) for g in self.gramaticas])
 
-    def get_cfg_string(self):
-        return '\n\n'.join([str(g) for g in self.gramaticas.get_cfg_string()])
-
     def set_gramaticas(self, gramaticas: list[Gramatica]) -> 'Linguagem':
         self.gramaticas = gramaticas
         return self

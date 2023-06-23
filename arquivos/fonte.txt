@@ -1,4 +1,4 @@
-var aux1 = 0;
+int aux1 = 0;
 
 enquanto (aux1 != 5) {
     se (aux1 == 1) {

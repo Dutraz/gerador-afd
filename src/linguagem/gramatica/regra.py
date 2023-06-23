@@ -36,11 +36,5 @@ class Regra:
     def is_final(self) -> bool:
         return isinstance(self.simbolos[0], s.Epsilon)
 
-    def get_cfg_string(self):
-        return ' '.join([
-            str(simbolo) if isinstance(simbolo, s.SimboloTerminal) else simbolo.get_cfg_string()
-            for simbolo in self.simbolos
-        ])
-
     def get_token_reconhecido(self) -> str:
         return self.token_reconhecido
