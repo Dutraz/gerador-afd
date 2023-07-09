@@ -78,9 +78,3 @@ class Linguagem:
                             simbolo.get_producao().get_regras().remove(regra)
 
         return gramaticas
-
-    def get_tamanho_regras(self) -> list[int]:
-        tamanho_regras = []
-        for g in self.gramaticas:
-            tamanho_regras.extend(g.get_tamanho_regras())
-        return tamanho_regras

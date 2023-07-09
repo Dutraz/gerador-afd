@@ -37,6 +37,7 @@ class AnalisadorSintatico:
         # Inicia a pilha apenas com estado inicial
         pilha = [0]
         index_fita = 0
+        acao = None
 
         # Reconhecimento por pilha vazia
         while pilha:
@@ -50,6 +51,7 @@ class AnalisadorSintatico:
                 token = fita[index_fita]
                 terminal = token.get_valor_sintatico()
             else:
+                token = None
                 terminal = '$'
 
             # Pega a ação com base no número do estado do topo da pilha
@@ -107,7 +109,8 @@ class AnalisadorSintatico:
             else:
                 return {
                     'sucesso': False,
-                    'mensagem': f'*** Erro sintático encontrado na linha {token.get_linha()}, token não esperado: "{token.get_valor_lexico()}".',
+                    'mensagem': f'*** Erro sintático encontrado na linha {token.get_linha()},'
+                                f' token não esperado: "{token.get_valor_lexico()}".',
                     'detalhe': self.get_detalhe_erro(fita, token)
                 }
 

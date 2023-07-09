@@ -22,9 +22,3 @@ class Gramatica:
         }
         nao_terminais.update(set([s for s in self.simbolos]))
         return nao_terminais
-
-    def get_tamanho_regras(self) -> list[int]:
-        tamanho_regras = []
-        for s in self.simbolos:
-            tamanho_regras.extend(s.get_tamanho_regras())
-        return tamanho_regras
