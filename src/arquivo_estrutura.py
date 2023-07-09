@@ -17,44 +17,45 @@ def verifica_alteracao(path):
 
 
 def ler_estruturas(path: str):
-    gramatica = {}
+    gramatica = [{
+        'simbolo': 'S\'',
+        'producao': 'S',
+        'tamanho': 1,
+        'acoes': None,
+    }]
 
     with open(path, encoding='utf-8') as arquivo:
         for linha in arquivo:
 
-            # Remove os cometários
+            # Remove os comentários
             linha = linha.split('//')[0]
 
             if linha.strip():
-                # Separa o símbolo das produções
-                nao_terminal, producao = linha.strip().split('::=')
+                # Separa o símbolo das produções e ações
+                nao_terminal, producao_acao = linha.strip().split('::=')
 
                 nao_terminal = nao_terminal.strip().replace('<', '').replace('>', '')
+
+                # Separa as produções das ações
+                producao_acao = producao_acao.strip().split('{{')
+
                 producao = remove_multiplos_espacos(
-                    producao.replace('<', ' ').replace('>', ' ').replace('ε', '\'\'').strip()
+                    producao_acao[0].replace('<', ' ').replace('>', ' ').replace('ε', '\'\'').strip()
                 )
 
-                if nao_terminal not in gramatica:
-                    gramatica[nao_terminal] = []
+                acoes = None
 
-                gramatica[nao_terminal].append(
-                    producao
-                )
+                if len(producao_acao) > 1:
+                    acoes = producao_acao[1].replace('}}', '').strip().split(';')
 
-    gramatica_cfg = [{
-        'simbolo': 'S\'',
-        'producao': 'S',
-        'tamanho': 1,
-    }]
-    for nao_terminal, producao in gramatica.items():
-        for p in producao:
-            gramatica_cfg.append({
-                'simbolo': nao_terminal,
-                'producao': p,
-                'tamanho': len(p.split())
-            })
+                gramatica.append({
+                    'simbolo': nao_terminal,
+                    'producao': producao,
+                    'tamanho': len(producao.split()),
+                    'acoes': acoes,
+                })
 
-    return gramatica_cfg
+    return gramatica
 
 
 def remove_multiplos_espacos(string):

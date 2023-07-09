@@ -8,9 +8,11 @@ class Tabela:
         self.simbolos = simbolos
 
     def __str__(self):
-        tabela = PrettyTable(list(['ESTADO', 'NOME', 'LINHA']))
+        tabela = PrettyTable(list(['ESTADO', 'LÉXICO', 'SINTÁTICO', 'LINHA']))
         for s in self.simbolos:
-            tabela.add_row([f'[{s.get_caracter_estado_final()}]', s.get_nome(), s.get_linha()])
+            tabela.add_row(
+                [f'[{s.get_caracter_estado_final()}]', s.get_valor_lexico(), s.get_valor_sintatico(), s.get_linha()]
+            )
         return str(tabela)
 
     def add_simbolo(self, simbolo):

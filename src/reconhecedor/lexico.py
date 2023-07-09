@@ -21,7 +21,7 @@ class AnalisadorLexico:
         erros = ''
         for s in self.tabela.get_simbolos():
             if s.get_estado_final().is_erro():
-                erros += f'*** Erro léxico encontrado na linha {s.get_linha()}, token não reconhecido: "{s.get_nome()}".\n'
+                erros += f'*** Erro léxico encontrado na linha {s.get_linha()}, token não reconhecido: "{s.get_valor_lexico()}".\n'
         return erros
 
     def carregar_tokens(self, tokens):
@@ -31,7 +31,7 @@ class AnalisadorLexico:
 
         for token in tokens:
             estado_atual = automato.get_estado_inicial()
-            for caracter in token.nome:
+            for caracter in token.valor_lexico:
 
                 if caracter not in estado_atual.get_transicoes():
                     estado_atual = estado_erro
@@ -47,4 +47,5 @@ class AnalisadorLexico:
                 estado_atual = estado_erro
 
             token.set_estado_final(estado_atual)
+            token.set_valor_sintatico(estado_atual.get_token_reconhecido())
             self.tabela.add_simbolo(token)

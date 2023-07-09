@@ -37,7 +37,7 @@
 
 
 // DECLARAÇÃO
-<F> ::= var <A> = <D>;
+<F> ::= int <A> = <D>;
 
 // ATRIBUIÇÃO
 <G> ::= <A> = <D>;

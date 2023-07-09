@@ -1,5 +1,6 @@
 from src.debug import is_debug
 from src.reconhecedor.jsmachines import get_tabela_lr
+from src.reconhecedor.semantico import AnalisadorSemantico
 from src.reconhecedor.tabela_analise.acao import Empilhamento, Reducao, Salto, Aceite
 
 
@@ -14,23 +15,13 @@ class AnalisadorSintatico:
         )
         self.fita = fita
 
-    def substituir_por_estados(self):
-        reconhecedores = self.linguagem.automato.get_estados_reconhecedores()
-
-        for estado in self.tabela_analise.get_estados():
-            nao_terminais = list(estado.get_acoes().keys())
-            for nao_terminal in nao_terminais:
-                if nao_terminal in reconhecedores:
-                    estado.set_acao(
-                        f'%{reconhecedores[nao_terminal].get_caracteres()}%',
-                        estado.get_acao(nao_terminal)
-                    )
-                    estado.rm_acao_por(nao_terminal)
-
     def get_tabela_analise(self):
         return self.tabela_analise
 
     def verificar(self):
+        # Instancia o analisador semantico
+        semantico = AnalisadorSemantico(self.fita)
+
         # Pega a tabela de análise
         tabela = self.tabela_analise
 
@@ -57,7 +48,7 @@ class AnalisadorSintatico:
             if index_fita < len(fita):
                 # Pega o estado do início da fita
                 token = fita[index_fita]
-                terminal = f'%{token.get_estado_final()}%'
+                terminal = token.get_valor_sintatico()
             else:
                 terminal = '$'
 
@@ -75,6 +66,12 @@ class AnalisadorSintatico:
             elif isinstance(acao, Reducao):
                 # Pega a producao numerada pela reduçãp
                 producao = self.sintatico[acao.get_estado()]
+
+                # Pega as ações semânticas do arquivo
+                acoes_semanticas = producao.get('acoes')
+
+                if acoes_semanticas:
+                    semantico.realizar_acoes(acoes_semanticas)
 
                 # Desempilha o dobro do tamanho da produção
                 for _ in range(producao['tamanho'] * 2):
@@ -110,7 +107,7 @@ class AnalisadorSintatico:
             else:
                 return {
                     'sucesso': False,
-                    'mensagem': f'*** Erro sintático encontrado na linha {token.get_linha()}, token não esperado: "{token.get_nome()}".',
+                    'mensagem': f'*** Erro sintático encontrado na linha {token.get_linha()}, token não esperado: "{token.get_valor_lexico()}".',
                     'detalhe': self.get_detalhe_erro(fita, token)
                 }
 
@@ -126,32 +123,32 @@ class AnalisadorSintatico:
         pos = linha.index(token)
 
         # Calcula qual a posição da seta que indica a posição do erro
-        espacamento = len(" ".join([t.get_nome() for t in linha[:pos]]))
+        espacamento = len(" ".join([t.get_valor_lexico() for t in linha[:pos]]))
 
         return '\n'.join([
             '> [...]',
             '> ',
-            f'> {" ".join([t.get_nome() for t in linha])}',
+            f'> {" ".join([t.get_valor_lexico() for t in linha])}',
             f'> {"".join([" " for _ in range(espacamento + 1)])}^',
             '> [...]',
         ])
 
     @staticmethod
     def imprime_reconhecimento(pilha, fita, index_fita, acao):
-        escapacamento = 20 - len(
+        espacamento = 30 - len(
             ' '.join([str(c) for c in pilha])
         ) + len(
-            ' '.join([str(f) for f in fita[:index_fita]])
+            ' '.join([f.get_valor_lexico() for f in fita[:index_fita]])
         )
 
         if index_fita >= len(fita) or index_fita == 0:
-            escapacamento = escapacamento - 1
+            espacamento = espacamento - 1
 
         print(
             '$',
             ' '.join([str(c) for c in pilha]),
-            ''.join([' ' for _ in range(escapacamento)]),
-            ' '.join([str(f) for f in fita[index_fita:]]),
+            ''.join([' ' for _ in range(espacamento)]),
+            ' '.join([f.get_valor_lexico() for f in fita[index_fita:]]),
             '$',
             f'({acao})'
         )

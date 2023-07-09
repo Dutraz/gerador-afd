@@ -9,6 +9,6 @@ def is_debug() -> bool:
     return DEBUG
 
 
-def debug(texto: str, espacador: bool = False):
+def debug(texto, espacador: bool = False):
     if DEBUG:
         print(texto, '\n\n===============\n\n' if espacador else '\n')

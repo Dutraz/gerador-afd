@@ -80,10 +80,6 @@ def main():
     )
     debug(analisador_sintatico.get_tabela_analise(), True)
 
-    debug('\nSUBSTITUINDO TOKENS POR ESTADOS...\n')
-    analisador_sintatico.substituir_por_estados()
-    debug(analisador_sintatico.get_tabela_analise(), True)
-
     debug('\nANALISANDO SINTATICAMENTE CÓDIGO FONTE...\n')
     verificacao_sintatica = analisador_sintatico.verificar()
     debug('\n\n=============\n\n')

@@ -137,7 +137,8 @@ class Automato:
         return reconhecedoras
 
     # Transforma uma gramática em um array de estados
-    def __carregar_gramatica(self, gramatica: Gramatica) -> list[Estado]:
+    @staticmethod
+    def __carregar_gramatica(gramatica: Gramatica) -> list[Estado]:
 
         # Função auxiliar para gerar tabela não terminais
         gerador_nao_terminal = gerador_de_tokens()

@@ -1,9 +1,10 @@
 class Simbolo:
 
-    def __init__(self, nome: str, linha: int):
-        self.nome = nome
+    def __init__(self, valor_lexico: str, linha: int):
+        self.valor_lexico = valor_lexico
         self.linha = linha
         self.estado_final = None
+        self.valor_sintatico = None
 
     def __str__(self):
         return f'[{self.estado_final}]'
@@ -13,8 +14,15 @@ class Simbolo:
     def get_linha(self):
         return self.linha
 
-    def get_nome(self):
-        return self.nome
+    def get_valor_lexico(self):
+        return self.valor_lexico
+
+    def set_valor_sintatico(self, valor_sintatico):
+        self.valor_sintatico = valor_sintatico
+        return self
+
+    def get_valor_sintatico(self):
+        return self.valor_sintatico
 
     def set_estado_final(self, estado_final):
         self.estado_final = estado_final
