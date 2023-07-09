@@ -5,6 +5,7 @@ class Simbolo:
         self.linha = linha
         self.estado_final = None
         self.valor_sintatico = None
+        self.tipo = None
 
     def __str__(self):
         return f'[{self.estado_final}]'
@@ -32,3 +33,10 @@ class Simbolo:
 
     def get_caracter_estado_final(self):
         return self.estado_final.get_caracteres()
+
+    def get_atributo(self, name):
+        return self.__getattribute__(name)
+
+    def set_atributo(self, name, value):
+        self.__setattr__(name, value)
+        return self

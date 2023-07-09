@@ -75,7 +75,7 @@ def main():
     analisador_sintatico = AnalisadorSintatico(
         linguagem,
         estruturas,
-        analisador_lexico.get_fita(),
+        analisador_lexico.get_tabela(),
         verifica_alteracao('arquivos/estruturas.txt'),
     )
     debug(analisador_sintatico.get_tabela_analise(), True)

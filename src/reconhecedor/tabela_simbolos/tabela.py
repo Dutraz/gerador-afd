@@ -11,7 +11,8 @@ class Tabela:
         tabela = PrettyTable(list(['ESTADO', 'LÉXICO', 'SINTÁTICO', 'LINHA']))
         for s in self.simbolos:
             tabela.add_row(
-                [f'[{s.get_caracter_estado_final()}]', s.get_valor_lexico(), s.get_valor_sintatico(), s.get_linha()]
+                [f'[{s.get_caracter_estado_final()}]' if s.get_estado_final() else '', s.get_valor_lexico(),
+                 s.get_valor_sintatico(), s.get_linha()]
             )
         return str(tabela)
 

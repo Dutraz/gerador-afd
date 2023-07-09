@@ -11,7 +11,7 @@
 
 
 // VARIÁVEIS
-<A> ::= var_id
+<A> ::= var_id            {{ addTS(A.valor_lexico, var_id.valor_lexico) }}
 
 // INTEIROS
 <B> ::= int_num
@@ -37,7 +37,9 @@
 
 
 // DECLARAÇÃO
-<F> ::= int <A> = <D>;
+<Z> ::= int
+<Z> ::= real
+<F> ::= <Z> <A> = <D>;      {{ addTS(A.tipo, Z.valor_lexico) }}
 
 // ATRIBUIÇÃO
 <G> ::= <A> = <D>;

@@ -7,21 +7,22 @@ from src.reconhecedor.tabela_simbolos.simbolo import Simbolo
 
 class AnalisadorSintatico:
 
-    def __init__(self, linguagem, sintatico: list[dict], fita, recarregar_sintatico: bool):
+    def __init__(self, linguagem, sintatico: list[dict], tabela_simbolos, recarregar_sintatico: bool):
         self.linguagem = linguagem
         self.sintatico = sintatico
         self.tabela_analise = get_tabela_lr(
             '\n'.join([f'{e["simbolo"]} -> {e["producao"]}' for e in sintatico]),
             recarregar_sintatico,
         )
-        self.fita = fita
+        self.fita = tabela_simbolos.get_simbolos()
+        self.tabela_simbolos = tabela_simbolos
 
     def get_tabela_analise(self):
         return self.tabela_analise
 
     def verificar(self):
         # Instancia o analisador semantico
-        semantico = AnalisadorSemantico(self.fita)
+        semantico = AnalisadorSemantico(self.tabela_simbolos)
 
         # Pega a tabela de análise
         tabela = self.tabela_analise
@@ -73,12 +74,13 @@ class AnalisadorSintatico:
                 # Pega as ações semânticas do arquivo
                 acoes_semanticas = producao.get('acoes')
 
-                if acoes_semanticas:
-                    semantico.realizar_acoes(acoes_semanticas)
+                desempilhados = []
 
                 # Desempilha o dobro do tamanho da produção
                 for _ in range(producao['tamanho'] * 2):
-                    pilha.pop()
+                    desempilhado = pilha.pop()
+                    if isinstance(desempilhado, Simbolo):
+                        desempilhados.append(desempilhado)
 
                 # Pega o número do estado do topo da pilha
                 num_estado = int(pilha[-1])
@@ -95,6 +97,9 @@ class AnalisadorSintatico:
 
                 # Insere a ação resultante dos últimos dois itens da pilha
                 pilha.append(acao.get_estado())
+
+                if acoes_semanticas:
+                    semantico.realizar_acoes(acoes_semanticas, desempilhados, producao['simbolo'])
 
             elif isinstance(acao, Salto):
                 return {
