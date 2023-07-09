@@ -2,6 +2,7 @@ from src.debug import is_debug
 from src.reconhecedor.jsmachines import get_tabela_lr
 from src.reconhecedor.semantico import AnalisadorSemantico
 from src.reconhecedor.tabela_analise.acao import Empilhamento, Reducao, Salto, Aceite
+from src.reconhecedor.tabela_simbolos.simbolo import Simbolo
 
 
 class AnalisadorSintatico:
@@ -109,8 +110,10 @@ class AnalisadorSintatico:
             else:
                 return {
                     'sucesso': False,
-                    'mensagem': f'*** Erro sintático encontrado na linha {token.get_linha()},'
-                                f' token não esperado: "{token.get_valor_lexico()}".',
+                    'mensagem': ''.join([
+                        f'*** Erro sintático encontrado na linha {token.get_linha()},',
+                        f' token não esperado: "{token.get_valor_lexico()}".'
+                    ]),
                     'detalhe': self.get_detalhe_erro(fita, token)
                 }
 
@@ -139,9 +142,9 @@ class AnalisadorSintatico:
     @staticmethod
     def imprime_reconhecimento(pilha, fita, index_fita, acao):
         espacamento = 30 - len(
-            ' '.join([str(c) for c in pilha])
+            ' '.join([c.get_valor_sintatico() if isinstance(c, Simbolo) else str(c) for c in pilha])
         ) + len(
-            ' '.join([f.get_valor_lexico() for f in fita[:index_fita]])
+            ' '.join([f.get_valor_sintatico() for f in fita[:index_fita]])
         )
 
         if index_fita >= len(fita) or index_fita == 0:
@@ -149,9 +152,9 @@ class AnalisadorSintatico:
 
         print(
             '$',
-            ' '.join([str(c) for c in pilha]),
+            ' '.join([c.get_valor_sintatico() if isinstance(c, Simbolo) else str(c) for c in pilha]),
             ''.join([' ' for _ in range(espacamento)]),
-            ' '.join([f.get_valor_lexico() for f in fita[index_fita:]]),
+            ' '.join([f.get_valor_sintatico() for f in fita[index_fita:]]),
             '$',
             f'({acao})'
         )
