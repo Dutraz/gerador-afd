@@ -1,4 +1,5 @@
 int
+bool
 se
 enquanto
 imprime
@@ -24,3 +25,14 @@ imprime
 // Inteiros
 <S> ::= 0<A> | 1<A> | 2<A> | 3<A> | 4<A> | 5<A> | 6<A> | 7<A> | 8<A> | 9<A>
 <A> ::= 0<A> | 1<A> | 2<A> | 3<A> | 4<A> | 5<A> | 6<A> | 7<A> | 8<A> | 9<A> | ε %int_num%
+
+// Booleanos
+<S> ::= t<A> | f<D>
+<A> ::= r<B>
+<B> ::= u<C>
+<C> ::= e<H>
+<D> ::= a<E>
+<E> ::= l<F>
+<F> ::= s<G>
+<G> ::= e<H>
+<H> ::= ε %bool_val%

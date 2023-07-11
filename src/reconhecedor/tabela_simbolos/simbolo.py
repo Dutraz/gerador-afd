@@ -6,6 +6,9 @@ class Simbolo:
         self.estado_final = None
         self.valor_sintatico = None
         self.tipo = None
+        self.producao = None
+        self.tamanho = None
+        self.acoes = None
 
     def __str__(self):
         return f'[{self.estado_final}]'
@@ -40,3 +43,20 @@ class Simbolo:
     def set_atributo(self, name, value):
         self.__setattr__(name, value)
         return self
+
+    def set_producao(self, producao: str):
+        self.producao = producao
+        return self
+
+    def get_producao(self) -> str:
+        return self.producao
+
+    def get_tamanho(self) -> int:
+        return len(self.producao.split())
+
+    def set_acoes(self, acoes: list[str]):
+        self.acoes = acoes
+        return self
+
+    def get_acoes(self) -> str:
+        return self.acoes

@@ -7,11 +7,11 @@ from src.reconhecedor.tabela_simbolos.simbolo import Simbolo
 
 class AnalisadorSintatico:
 
-    def __init__(self, linguagem, sintatico: list[dict], tabela_simbolos, recarregar_sintatico: bool):
+    def __init__(self, linguagem, sintatico: list[Simbolo], tabela_simbolos: list[Simbolo], recarregar_sintatico: bool):
         self.linguagem = linguagem
         self.sintatico = sintatico
         self.tabela_analise = get_tabela_lr(
-            '\n'.join([f'{e["simbolo"]} -> {e["producao"]}' for e in sintatico]),
+            '\n'.join([f'{e.get_valor_sintatico()} -> {e.get_producao()}' for e in sintatico]),
             recarregar_sintatico,
         )
         self.fita = tabela_simbolos.get_simbolos()
@@ -72,12 +72,12 @@ class AnalisadorSintatico:
                 producao = self.sintatico[acao.get_estado()]
 
                 # Pega as ações semânticas do arquivo
-                acoes_semanticas = producao.get('acoes')
+                acoes_semanticas = producao.get_acoes()
 
                 desempilhados = []
 
                 # Desempilha o dobro do tamanho da produção
-                for _ in range(producao['tamanho'] * 2):
+                for _ in range(producao.get_tamanho() * 2):
                     desempilhado = pilha.pop()
                     if isinstance(desempilhado, Simbolo):
                         desempilhados.append(desempilhado)
@@ -86,20 +86,29 @@ class AnalisadorSintatico:
                 num_estado = int(pilha[-1])
 
                 # Insere o nome da regra no topo da pilha
-                pilha.append(producao['simbolo'])
+                pilha.append(producao)
 
                 # Pega a ação resultante dos últimos dois itens da pilha
                 acao = tabela.get_estado(
                     num_estado
                 ).get_acao(
-                    f'{producao["simbolo"]}'
+                    f'{producao.get_valor_sintatico()}'
                 )
 
                 # Insere a ação resultante dos últimos dois itens da pilha
                 pilha.append(acao.get_estado())
 
                 if acoes_semanticas:
-                    semantico.realizar_acoes(acoes_semanticas, desempilhados, producao['simbolo'])
+                    retorno = semantico.realizar_acoes(acoes_semanticas, desempilhados, producao)
+                    if not retorno['sucesso']:
+                        return {
+                            'sucesso': False,
+                            'mensagem': ''.join([
+                                f'*** Erro semântico encontrado na linha {fita[index_fita-1].get_linha()}. ',
+                                retorno['mensagem']
+                            ]),
+                            'detalhe': self.get_detalhe_erro(fita, fita[index_fita-1])
+                        }
 
             elif isinstance(acao, Salto):
                 return {
@@ -123,7 +132,7 @@ class AnalisadorSintatico:
                 }
 
         if is_debug():
-            self.imprime_reconhecimento(pilha, fita, index_fita, acao)
+            self.imprime_reconhecimento(pilha, fita, index_fita, acao, acoes_semanticas)
 
     @staticmethod
     def get_detalhe_erro(fita, token):
@@ -159,7 +168,7 @@ class AnalisadorSintatico:
             '$',
             ' '.join([c.get_valor_sintatico() if isinstance(c, Simbolo) else str(c) for c in pilha]),
             ''.join([' ' for _ in range(espacamento)]),
-            ' '.join([f.get_valor_sintatico() for f in fita[index_fita:]]),
+            ' '.join([f.get_valor_sintatico() or '' for f in fita[index_fita:]]),
             '$',
             f'({acao})'
         )

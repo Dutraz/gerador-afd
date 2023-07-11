@@ -69,7 +69,7 @@ def main():
     estruturas = ler_estruturas('arquivos/estruturas.txt')
 
     debug('\nTRADUZINDO O ARQUIVO DE ESTRUTURAS...\n')
-    debug('\n'.join([f'|{i:02d}| {e["simbolo"]} -> {e["producao"]}' for i, e in enumerate(estruturas)]))
+    debug('\n'.join([f'|{i:02d}| {e.get_valor_sintatico()} -> {e.get_producao()}' for i, e in enumerate(estruturas)]))
 
     debug('\nCARREGANDO TABELA DE ANÁLISE...\n')
     analisador_sintatico = AnalisadorSintatico(
@@ -88,7 +88,8 @@ def main():
         debug('Código fonte reconhecido sintaticamente.', True)
     else:
         print(verificacao_sintatica['mensagem'], end='\n\n')
-        print(verificacao_sintatica['detalhe'], end='\n\n')
+        if verificacao_sintatica.get('detalhe', False):
+            print(verificacao_sintatica['detalhe'], end='\n\n')
         exit()
 
     print('CÓDIGO RECONHECIDO COM SUCESSO!\n')

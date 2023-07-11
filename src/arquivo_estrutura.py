@@ -3,6 +3,8 @@ import os
 import re
 import shutil
 
+from src.reconhecedor.tabela_simbolos.simbolo import Simbolo
+
 
 def verifica_alteracao(path):
     # Se o arquivo de estruturas em cache já existe e foi alterado
@@ -17,12 +19,9 @@ def verifica_alteracao(path):
 
 
 def ler_estruturas(path: str):
-    gramatica = [{
-        'simbolo': 'S\'',
-        'producao': 'S',
-        'tamanho': 1,
-        'acoes': None,
-    }]
+    gramatica = [
+        Simbolo(None, None).set_producao('S').set_acoes(None).set_valor_sintatico('S\'')
+    ]
 
     with open(path, encoding='utf-8') as arquivo:
         for linha in arquivo:
@@ -48,12 +47,9 @@ def ler_estruturas(path: str):
                 if len(producao_acao) > 1:
                     acoes = producao_acao[1].replace('}}', '').strip().split(';')
 
-                gramatica.append({
-                    'simbolo': nao_terminal,
-                    'producao': producao,
-                    'tamanho': len(producao.split()),
-                    'acoes': acoes,
-                })
+                gramatica.append(
+                    Simbolo(None, None).set_producao(producao).set_acoes(acoes).set_valor_sintatico(nao_terminal)
+                )
 
     return gramatica
 

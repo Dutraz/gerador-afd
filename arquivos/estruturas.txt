@@ -11,40 +11,47 @@
 
 
 // VARIÁVEIS
-<A> ::= var_id            {{ addTS(A.valor_lexico, var_id.valor_lexico) }}
+<A> ::= var_id              {{ addTS(A.valor_lexico, var_id.valor_lexico) }}
 
 // INTEIROS
-<B> ::= int_num
+<B> ::= int_num             {{ addTS(B.tipo, INTEIRO) }}
+
+// BOOLEANOS
+<Y> ::= bool_val            {{ addTS(Y.tipo, BOOLEANO) }}
+
+// DECLARAÇÃO
+<Z> ::= int                 {{ addTS(Z.tipo, INTEIRO) }}
+<Z> ::= bool                {{ addTS(Z.tipo, BOOLEANO) }}
+<F> ::= <Z> <A>;            {{ addTS(A.tipo, Z.tipo) }}
+
+
 
 // OPERADORES
 <C> ::= +
 <C> ::= -
-<C> ::= *
-<C> ::= /
+<X> ::= *
+<X> ::= /
+
+// EXPRESSÕES
+<V> ::= <A>                 {{ addTS(V.tipo, A.tipo) }}
+<V> ::= <B>                 {{ addTS(V.tipo, B.tipo) }}
+<V> ::= <Y>                 {{ addTS(V.tipo, Y.tipo) }}
+<V> ::= (<D>)               {{ addTS(V.tipo, D.tipo) }}
+
+<D> ::= <D><C><W>           {{ addTS(D.tipo, D.tipo); verifica(D.tipo, W.tipo) }}
+<D> ::= <W>                 {{ addTS(D.tipo, W.tipo) }}
+
+<W> ::= <W><X><V>           {{ addTS(W.tipo, W.tipo); verifica(W.tipo, V.tipo) }}
+<W> ::= <V>                 {{ addTS(W.tipo, V.tipo) }}
+
+// ATRIBUIÇÃO
+<G> ::= <A> = <D>;          {{ verifica(A.tipo, D.tipo) }}
 
 
-
-// EXPRESSÃO
-<D> ::= <A>
-<D> ::= <B>
-<D> ::= <A><C><D>
-<D> ::= <B><C><D>
 
 // CONDIÇÃO
 <E> ::= <D> == <D>
 <E> ::= <D> != <D>
-
-
-
-// DECLARAÇÃO
-<Z> ::= int
-<Z> ::= real
-<F> ::= <Z> <A> = <D>;      {{ addTS(A.tipo, Z.valor_lexico) }}
-
-// ATRIBUIÇÃO
-<G> ::= <A> = <D>;
-
-
 
 // BLOCO CONDICIONAL
 <H> ::= <I>(<E>) {<S>}
