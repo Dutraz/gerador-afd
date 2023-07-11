@@ -1,12 +1,12 @@
 // CORPO DO CÓDIGO
-<S> ::= <F><S>
-<S> ::= <F>
-<S> ::= <G><S>
-<S> ::= <G>
-<S> ::= <H><S>
-<S> ::= <H>
-<S> ::= <J><S>
-<S> ::= <J>
+<S> ::= <E><S>
+<S> ::= <E>
+<S> ::= <K><S>
+<S> ::= <K>
+<S> ::= <M><S>
+<S> ::= <M>
+<S> ::= <N><S>
+<S> ::= <N>
 
 
 
@@ -17,50 +17,50 @@
 <B> ::= int_num             {{ addTS(B.tipo, INTEIRO) }}
 
 // BOOLEANOS
-<Y> ::= bool_val            {{ addTS(Y.tipo, BOOLEANO) }}
+<C> ::= bool_val            {{ addTS(C.tipo, BOOLEANO) }}
 
 // DECLARAÇÃO
-<Z> ::= int                 {{ addTS(Z.tipo, INTEIRO) }}
-<Z> ::= bool                {{ addTS(Z.tipo, BOOLEANO) }}
-<F> ::= <Z> <A>;            {{ addTS(A.tipo, Z.tipo) }}
+<D> ::= int                 {{ addTS(D.tipo, INTEIRO) }}
+<D> ::= bool                {{ addTS(D.tipo, BOOLEANO) }}
+<E> ::= <D> <A>;            {{ addTS(A.tipo, D.tipo) }}
 
 
 
 // OPERADORES
-<C> ::= +
-<C> ::= -
-<X> ::= *
-<X> ::= /
+<F> ::= +
+<F> ::= -
+<G> ::= *
+<G> ::= /
 
 // EXPRESSÕES
-<V> ::= <A>                 {{ addTS(V.tipo, A.tipo) }}
-<V> ::= <B>                 {{ addTS(V.tipo, B.tipo) }}
-<V> ::= <Y>                 {{ addTS(V.tipo, Y.tipo) }}
-<V> ::= (<D>)               {{ addTS(V.tipo, D.tipo) }}
+<H> ::= <A>                 {{ addTS(H.tipo, A.tipo) }}
+<H> ::= <B>                 {{ addTS(H.tipo, B.tipo) }}
+<H> ::= <C>                 {{ addTS(H.tipo, C.tipo) }}
+<H> ::= (<I>)               {{ addTS(H.tipo, I.tipo) }}
 
-<D> ::= <D><C><W>           {{ addTS(D.tipo, D.tipo); verifica(D.tipo, W.tipo) }}
-<D> ::= <W>                 {{ addTS(D.tipo, W.tipo) }}
+<I> ::= <I><F><J>           {{ addTS(I.tipo, I.tipo); verifica(I.tipo, J.tipo) }}
+<I> ::= <J>                 {{ addTS(I.tipo, J.tipo) }}
 
-<W> ::= <W><X><V>           {{ addTS(W.tipo, W.tipo); verifica(W.tipo, V.tipo) }}
-<W> ::= <V>                 {{ addTS(W.tipo, V.tipo) }}
+<J> ::= <J><G><H>           {{ addTS(J.tipo, J.tipo); verifica(J.tipo, H.tipo) }}
+<J> ::= <H>                 {{ addTS(J.tipo, H.tipo) }}
 
 // ATRIBUIÇÃO
-<G> ::= <A> = <D>;          {{ verifica(A.tipo, D.tipo) }}
+<K> ::= <A> = <I>;          {{ verifica(A.tipo, I.tipo) }}
 
 
 
 // CONDIÇÃO
-<E> ::= <D> == <D>
-<E> ::= <D> != <D>
+<L> ::= <I> == <I>
+<L> ::= <I> != <I>
 
 // BLOCO CONDICIONAL
-<H> ::= <I>(<E>) {<S>}
+<M> ::= <M>(<L>) {<S>}
 
 // ESTRUTURA CONDICIONAL
-<I> ::= se
-<I> ::= enquanto
+<M> ::= se
+<M> ::= enquanto
 
 
 
 // FUNÇÃO
-<J> ::= imprime (<D>) ;
+<N> ::= imprime (<I>) ;
