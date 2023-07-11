@@ -9,6 +9,7 @@ class Simbolo:
         self.producao = None
         self.tamanho = None
         self.acoes = None
+        self.codigo = None
 
     def __str__(self):
         return f'[{self.estado_final}]'
@@ -58,5 +59,5 @@ class Simbolo:
         self.acoes = acoes
         return self
 
-    def get_acoes(self) -> str:
+    def get_acoes(self) -> list[str]:
         return self.acoes

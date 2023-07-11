@@ -1,6 +1,6 @@
 int aux1;
 
-aux1 = 1 + 2 - 3 * 5 / (1 + 3);
+aux1 = 2 * 5 / (1 + 3) - 2;
 
 enquanto (aux1 != true) {
     se (aux1 == 1) {

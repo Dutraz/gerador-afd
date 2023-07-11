@@ -3,6 +3,7 @@ from src.reconhecedor.jsmachines import get_tabela_lr
 from src.reconhecedor.semantico import AnalisadorSemantico
 from src.reconhecedor.tabela_analise.acao import Empilhamento, Reducao, Salto, Aceite
 from src.reconhecedor.tabela_simbolos.simbolo import Simbolo
+from src.util import gerador_de_temporarios
 
 
 class AnalisadorSintatico:
@@ -21,6 +22,12 @@ class AnalisadorSintatico:
         return self.tabela_analise
 
     def verificar(self):
+        # Instancia o gerador de temporários
+        gerador_temp = gerador_de_temporarios()
+
+        # Inicializa o código intermediário
+        codigo_intermediario = ''
+
         # Instancia o analisador semantico
         semantico = AnalisadorSemantico(self.tabela_simbolos)
 
@@ -99,7 +106,7 @@ class AnalisadorSintatico:
                 pilha.append(acao.get_estado())
 
                 if acoes_semanticas:
-                    retorno = semantico.realizar_acoes(acoes_semanticas, desempilhados, producao)
+                    retorno = semantico.realizar_acoes(acoes_semanticas, desempilhados, producao, gerador_temp)
                     if not retorno['sucesso']:
                         return {
                             'sucesso': False,
@@ -155,7 +162,7 @@ class AnalisadorSintatico:
 
     @staticmethod
     def imprime_reconhecimento(pilha, fita, index_fita, acao):
-        espacamento = 30 - len(
+        espacamento = 20 - len(
             ' '.join([c.get_valor_sintatico() if isinstance(c, Simbolo) else str(c) for c in pilha])
         ) + len(
             ' '.join([f.get_valor_sintatico() for f in fita[:index_fita]])
