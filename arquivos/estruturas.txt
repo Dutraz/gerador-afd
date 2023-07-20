@@ -38,14 +38,14 @@
 <H> ::= <C>                     {{ addTS(*H.tipo, C.tipo); addTS(*H.valor_lexico, C.valor_lexico); geraCod('') }}
 <H> ::= (<I>)                   {{ addTS(*H.tipo, I.tipo); addTS(*H.valor_lexico, I.valor_lexico); geraCod(I.codigo) }}
 
-<I> ::= <I><F><J>               {{ addTS(*I.tipo, I.tipo); verifica(I.tipo, J.tipo); geraTemp(*I.valor_lexico); geraCod(I.codigo, J.codigo, *I.valor_lexico, '=', I.valor_lexico, F.valor_lexico, J.valor_lexico, '\n') }}
+<I> ::= <I><F><J>               {{ addTS(*I.tipo, I.tipo); verifica(I.tipo, J.tipo); geraTemp(*I.valor_lexico); geraCod(I.codigo, J.codigo, *I.valor_lexico, '= ', I.valor_lexico, F.valor_lexico, J.valor_lexico, '\n') }}
 <I> ::= <J>                     {{ addTS(*I.tipo, J.tipo); addTS(*I.valor_lexico, J.valor_lexico); geraCod(J.codigo) }}
 
-<J> ::= <J><G><H>               {{ addTS(*J.tipo, J.tipo); verifica(J.tipo, H.tipo); geraTemp(*J.valor_lexico); geraCod(J.codigo, H.codigo, *J.valor_lexico, '=', J.valor_lexico, G.valor_lexico, H.valor_lexico, '\n') }}
+<J> ::= <J><G><H>               {{ addTS(*J.tipo, J.tipo); verifica(J.tipo, H.tipo); geraTemp(*J.valor_lexico); geraCod(J.codigo, H.codigo, *J.valor_lexico, '= ', J.valor_lexico, G.valor_lexico, H.valor_lexico, '\n') }}
 <J> ::= <H>                     {{ addTS(*J.tipo, H.tipo); addTS(*J.valor_lexico, H.valor_lexico); geraCod(H.codigo) }}
 
 // ATRIBUIÇÃO
-<K> ::= <A> = <I>;              {{ verifica(A.tipo, I.tipo); geraCod(I.codigo, A.valor_lexico, '=', I.valor_lexico)}}
+<K> ::= <A> = <I>;              {{ verifica(A.tipo, I.tipo); geraCod(I.codigo, A.valor_lexico, '= ', I.valor_lexico)}}
 
 // BLOCO CONDICIONAL
 <M> ::= <O>(<A> == <H>) {<Z>}   {{ geraCod(O.valor_lexico, '(', A.valor_lexico, ' == ', H.valor_lexico, ') {\n', Z.codigo, '\n}' ); verifica(A.tipo, H.tipo) }}
