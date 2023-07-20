@@ -1,3 +1,4 @@
+from src.arquivo_intermediario import salvarCodigoIntermediario
 from src.debug import is_debug
 from src.reconhecedor.jsmachines import get_tabela_lr
 from src.reconhecedor.semantico import AnalisadorSemantico
@@ -124,6 +125,7 @@ class AnalisadorSintatico:
                 }
 
             elif isinstance(acao, Aceite):
+                salvarCodigoIntermediario(pilha[-2].get_atributo('codigo'))
                 return {
                     'sucesso': True
                 }

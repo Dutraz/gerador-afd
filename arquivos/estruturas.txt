@@ -1,66 +1,59 @@
 // CORPO DO CÓDIGO
-<S> ::= <E><S>
-<S> ::= <E>
-<S> ::= <K><S>
-<S> ::= <K>
-<S> ::= <M><S>
-<S> ::= <M>
-<S> ::= <N><S>
-<S> ::= <N>
+<S> ::= <E><S>                  {{ geraCod(E.codigo, '\n', S.codigo) }}
+<S> ::= <E>                     {{ geraCod(E.codigo) }}
+<S> ::= <K><S>                  {{ geraCod(K.codigo, '\n', S.codigo) }}
+<S> ::= <K>                     {{ geraCod(K.codigo) }}
+<S> ::= <M><S>                  {{ geraCod(M.codigo, '\n', S.codigo) }}
+<S> ::= <M>                     {{ geraCod(M.codigo) }}
+<S> ::= <N><S>                  {{ geraCod(N.codigo, '\n', S.codigo) }}
+<S> ::= <N>                     {{ geraCod(N.codigo) }}
 
-
+<Z> ::= <S>                     {{ geraCod(S.codigo) }}
 
 // VARIÁVEIS
-<A> ::= var_id              {{ addTS(*A.valor_lexico, var_id.valor_lexico) }}
+<A> ::= var_id                  {{ addTS(*A.valor_lexico, var_id.valor_lexico) }}
 
 // INTEIROS
-<B> ::= int_num             {{ addTS(*B.tipo, INTEIRO); addTS(*B.valor_lexico, int_num.valor_lexico) }}
+<B> ::= int_num                 {{ addTS(*B.tipo, 'int'); addTS(*B.valor_lexico, int_num.valor_lexico) }}
 
 // BOOLEANOS
-<C> ::= bool_val            {{ addTS(*C.tipo, BOOLEANO); addTS(*C.valor_lexico, bool_val.valor_lexico) }}
+<C> ::= bool_val                {{ addTS(*C.tipo, 'bool'); addTS(*C.valor_lexico, bool_val.valor_lexico) }}
 
 // DECLARAÇÃO
-<D> ::= int                 {{ addTS(*D.tipo, INTEIRO) }}
-<D> ::= bool                {{ addTS(*D.tipo, BOOLEANO) }}
-<E> ::= <D> <A>;            {{ addTS(A.tipo, D.tipo) }}
+<D> ::= int                     {{ addTS(*D.valor_lexico, 'int') }}
+<D> ::= bool                    {{ addTS(*D.valor_lexico, 'bool') }}
+<E> ::= <D> <A>;                {{ addTS(A.tipo, D.valor_lexico); geraCod(D.valor_lexico, ' ', A.valor_lexico) }}
 
 
 
 // OPERADORES
-<F> ::= +                   {{ addTS(*F.valor_lexico, +) }}
-<F> ::= -                   {{ addTS(*F.valor_lexico, -) }}
-<G> ::= *                   {{ addTS(*G.valor_lexico, *) }}
-<G> ::= /                   {{ addTS(*G.valor_lexico, /) }}
+<F> ::= +                       {{ addTS(*F.valor_lexico, '+') }}
+<F> ::= -                       {{ addTS(*F.valor_lexico, '-') }}
+<G> ::= *                       {{ addTS(*G.valor_lexico, '*') }}
+<G> ::= /                       {{ addTS(*G.valor_lexico, '/') }}
 
 // EXPRESSÕES
-<H> ::= <A>                 {{ addTS(*H.tipo, A.tipo); addTS(*H.valor_lexico, A.valor_lexico); geraCod('') }}
-<H> ::= <B>                 {{ addTS(*H.tipo, B.tipo); addTS(*H.valor_lexico, B.valor_lexico); geraCod('') }}
-<H> ::= <C>                 {{ addTS(*H.tipo, C.tipo); addTS(*H.valor_lexico, C.valor_lexico); geraCod('') }}
-<H> ::= (<I>)               {{ addTS(*H.tipo, I.tipo); addTS(*H.valor_lexico, I.valor_lexico); geraCod(I.codigo) }}
+<H> ::= <A>                     {{ addTS(*H.tipo, A.tipo); addTS(*H.valor_lexico, A.valor_lexico); geraCod('') }}
+<H> ::= <B>                     {{ addTS(*H.tipo, B.tipo); addTS(*H.valor_lexico, B.valor_lexico); geraCod('') }}
+<H> ::= <C>                     {{ addTS(*H.tipo, C.tipo); addTS(*H.valor_lexico, C.valor_lexico); geraCod('') }}
+<H> ::= (<I>)                   {{ addTS(*H.tipo, I.tipo); addTS(*H.valor_lexico, I.valor_lexico); geraCod(I.codigo) }}
 
-<I> ::= <I><F><J>           {{ addTS(*I.tipo, I.tipo); verifica(I.tipo, J.tipo); geraTemp(*I.valor_lexico); geraCod(I.codigo, J.codigo, *I.valor_lexico, '=', I.valor_lexico, F.valor_lexico, J.valor_lexico, '\n') }}
-<I> ::= <J>                 {{ addTS(*I.tipo, J.tipo); addTS(*I.valor_lexico, J.valor_lexico); geraCod(J.codigo) }}
+<I> ::= <I><F><J>               {{ addTS(*I.tipo, I.tipo); verifica(I.tipo, J.tipo); geraTemp(*I.valor_lexico); geraCod(I.codigo, J.codigo, *I.valor_lexico, '=', I.valor_lexico, F.valor_lexico, J.valor_lexico, '\n') }}
+<I> ::= <J>                     {{ addTS(*I.tipo, J.tipo); addTS(*I.valor_lexico, J.valor_lexico); geraCod(J.codigo) }}
 
-<J> ::= <J><G><H>           {{ addTS(*J.tipo, J.tipo); verifica(J.tipo, H.tipo); geraTemp(*J.valor_lexico); geraCod(J.codigo, H.codigo, *J.valor_lexico, '=', J.valor_lexico, G.valor_lexico, H.valor_lexico, '\n') }}
-<J> ::= <H>                 {{ addTS(*J.tipo, H.tipo); addTS(*J.valor_lexico, H.valor_lexico); geraCod(H.codigo) }}
+<J> ::= <J><G><H>               {{ addTS(*J.tipo, J.tipo); verifica(J.tipo, H.tipo); geraTemp(*J.valor_lexico); geraCod(J.codigo, H.codigo, *J.valor_lexico, '=', J.valor_lexico, G.valor_lexico, H.valor_lexico, '\n') }}
+<J> ::= <H>                     {{ addTS(*J.tipo, H.tipo); addTS(*J.valor_lexico, H.valor_lexico); geraCod(H.codigo) }}
 
 // ATRIBUIÇÃO
-<K> ::= <A> = <I>;          {{ verifica(A.tipo, I.tipo); geraCod(I.codigo, A.valor_lexico, '=', I.valor_lexico, '\n')}}
-
-
-
-// CONDIÇÃO
-<L> ::= <I> == <I>
-<L> ::= <I> != <I>
+<K> ::= <A> = <I>;              {{ verifica(A.tipo, I.tipo); geraCod(I.codigo, A.valor_lexico, '=', I.valor_lexico)}}
 
 // BLOCO CONDICIONAL
-<M> ::= <M>(<L>) {<S>}
+<M> ::= <O>(<A> == <H>) {<Z>}   {{ geraCod(O.valor_lexico, '(', A.valor_lexico, ' == ', H.valor_lexico, ') {\n', Z.codigo, '\n}' ); verifica(A.tipo, H.tipo) }}
 
 // ESTRUTURA CONDICIONAL
-<M> ::= se
-<M> ::= enquanto
-
+<O> ::= se                      {{ addTS(*O.valor_lexico, 'se') }}
+<O> ::= enquanto                {{ addTS(*O.valor_lexico, 'enquanto') }}
 
 
 // FUNÇÃO
-<N> ::= imprime (<I>) ;
+<N> ::= imprime (<I>) ;         {{ geraCod(I.codigo, 'imprime(', I.valor_lexico, ')') }}

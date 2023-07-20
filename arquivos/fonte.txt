@@ -2,9 +2,8 @@ int aux1;
 
 aux1 = 2 * 5 / (1 + 3) - 2;
 
-enquanto (aux1 != true) {
-    se (aux1 == 1) {
+enquanto (aux1 == 1) {
+    se (aux1 == 2) {
         imprime(aux1);
     }
-    aux1 = aux1 + 1;
 }

@@ -12,6 +12,7 @@ class AnalisadorSemantico:
     def realizar_acoes(self, acoes: list[str], desempilhados: list[Simbolo], reconhecido: Simbolo, gera_temp):
         retorno = {'sucesso': True, 'mensagem': ''}
 
+        tem_gera_codigo = False
         desempilhados_copia = [copy(d) for d in desempilhados]
 
         for acao in acoes:
@@ -22,7 +23,8 @@ class AnalisadorSemantico:
 
         return retorno
 
-    def realizar_acao(self, acao: str, desempilhados: list[Simbolo], desempilhados_copia, reconhecido: Simbolo, gerador_temp):
+    def realizar_acao(self, acao: str, desempilhados: list[Simbolo], desempilhados_copia, reconhecido: Simbolo,
+                      gerador_temp):
         # Reconhece os parâmtros e seus atributos
         funcao = acao.split('(')[0]
         parametros = [
@@ -36,7 +38,8 @@ class AnalisadorSemantico:
 
             # Verifica se é um valor absoluto
             if isinstance(fonte, str):
-                atributo = fonte
+                # Pega o valor dentro das aspas
+                atributo = fonte[1:-1]
             else:
                 # Encontra quem é o simbolo fonte
                 simbolo_fonte = self.encontrar_simbolo(acao, desempilhados, reconhecido, fonte['simbolo'])
@@ -65,7 +68,6 @@ class AnalisadorSemantico:
             simbolo_destino.set_atributo('valor_lexico', next(gerador_temp))
 
         elif 'geraCod' in acao:
-            print(acao)
             codigo_intermediario = ''
 
             # Concatena todos os parametros da funcao
@@ -80,7 +82,6 @@ class AnalisadorSemantico:
                 codigo_intermediario += codigo
 
             reconhecido.set_atributo('codigo', codigo_intermediario)
-            print(codigo_intermediario)
 
         else:
             print(f'\n\n!!! Erro ao realizar acao {acao}, acao não reconhecida.\n')
@@ -100,8 +101,14 @@ class AnalisadorSemantico:
                     exit()
                 return reconhecido
 
+            # Caso tenha o número (quando tem recursão)
+            num = 0
+            if simbolo[-1].isdigit():
+                num = int(simbolo[-1]) - 1
+                simbolo = simbolo[:-1]
+
             # Caso seja uma operação com um dos simbolos da regra
-            return [s for s in simbolos if s.get_valor_sintatico() == simbolo][0]
+            return [s for s in simbolos if s.get_valor_sintatico() == simbolo][num]
 
         except IndexError:
             print(f'\n\n!!! Erro ao realizar acao {acao}, simbolos não encontrados.\n')
